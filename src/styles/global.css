@@ -1,0 +1,101 @@
+/*
+ * Renovart — global design-token system (Phase 1 shell).
+ * Established here and inherited by Phases 2–4. Source: 01-UI-SPEC.md.
+ * Slate + warm terracotta palette; spacing/radii/shadow/motion/focus tokens.
+ */
+
+:root {
+  /* Type families — self-hosted faces injected by the Astro Fonts API */
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Color — dominant (60%) */
+  --color-bg: #FFFFFF;
+  --color-surface: #F5F3F0;
+
+  /* Color — secondary slate scale (30%) */
+  --color-slate-900: #0F1B2D;
+  --color-slate-800: #1C2A40;
+  --color-slate-700: #2B3A50;
+  --color-slate-600: #3A4D68;
+  --color-slate-500: #51637D;
+
+  /* Color — accent terracotta (10%) */
+  --color-accent: #B5471F;
+  --color-accent-hover: #9C3D1A;
+  --color-accent-300: #E8A584;
+
+  /* Color — WhatsApp brand (button only) */
+  --color-whatsapp: #15803D;
+  --color-whatsapp-hover: #0F7A3A;
+
+  /* Color — text on dark + focus */
+  --color-on-dark: #FFFFFF;
+  --color-focus: #B5471F;
+
+  /* Spacing — 8-point scale (rem) */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-pill: 999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(15, 27, 45, 0.08);
+  --shadow-bar: 0 -2px 12px rgba(15, 27, 45, 0.18);
+  --shadow-md: 0 4px 16px rgba(15, 27, 45, 0.14);
+
+  /* Motion */
+  --motion-fast: 150ms ease-out;
+  --motion-base: 200ms ease-out;
+}
+
+/* Mobile-first base (LAY-04) */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-slate-900);
+  background: var(--color-bg);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  line-height: 1.2;
+  margin: 0 0 var(--space-md);
+}
+
+/* Global focus ring (QUA-02, D-07) — always-visible, never removed */
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Motion only when the user has no reduced-motion preference */
+@media (prefers-reduced-motion: no-preference) {
+  a,
+  button {
+    transition: color var(--motion-fast), background-color var(--motion-fast);
+  }
+}
