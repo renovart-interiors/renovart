@@ -11,6 +11,9 @@ interface Props {
 
 const { title, description = business.defaultDescription } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? business.domain);
+// Absolute OG image URL so social unfurls (WhatsApp/Facebook/LinkedIn) resolve
+// the preview image (WR-02). business.ogImage is the canonical default.
+const ogImage = new URL(business.ogImage, Astro.site ?? business.domain).href;
 ---
 
 <meta charset="utf-8" />
@@ -30,3 +33,5 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? business.domain);
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical.href} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:alt" content={`${business.name} — renovarea scărilor de bloc`} />

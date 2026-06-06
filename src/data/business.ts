@@ -20,5 +20,8 @@ export const business = {
   domain: 'https://nume-firma.ro', // D-14 placeholder
   defaultDescription:
     'Renovarea profesională a scărilor de bloc în Cluj-Napoca.',
-  ogImage: '/og-default.png', // placeholder OG image
+  // Placeholder OG image — a generated 1200x630 brand card lives at
+  // public/og-default.png. LAUNCH CHECKLIST: replace with a real branded
+  // before/after share image before handoff (WR-02 / IN-03).
+  ogImage: '/og-default.png',
 } as const;
