@@ -1,0 +1,33 @@
+---
+// Placeholder route (D-09) — real content arrives in Phases 2–3. Exists so the
+// shell nav has no dead links / 404s.
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Servicii — Renovart Interiors">
+  <div class="page">
+    <h1>Servicii</h1>
+    <p>Conținutul detaliat al serviciilor va fi disponibil în curând.</p>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: var(--space-2xl) var(--space-md);
+  }
+  h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-slate-900);
+  }
+  p {
+    color: var(--color-slate-700);
+  }
+  @media (min-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+  }
+</style>

@@ -1,0 +1,34 @@
+---
+// Placeholder route (D-09) — real "Despre" content arrives in Phase 3. Exists so
+// the shell nav has no dead links / 404s.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { business } from '../data/business';
+---
+
+<BaseLayout title="Despre — Renovart Interiors">
+  <div class="page">
+    <h1>Despre {business.name}</h1>
+    <p>Mai multe detalii despre echipa și experiența noastră vor fi disponibile în curând.</p>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: var(--space-2xl) var(--space-md);
+  }
+  h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-slate-900);
+  }
+  p {
+    color: var(--color-slate-700);
+  }
+  @media (min-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+  }
+</style>

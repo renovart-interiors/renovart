@@ -1,0 +1,33 @@
+---
+// Placeholder route (D-09) — the portfolio (lucrari collection + slider) arrives
+// in Phase 2. Exists so the shell nav has no dead links / 404s.
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Lucrări — Renovart Interiors">
+  <div class="page">
+    <h1>Lucrări</h1>
+    <p>Portofoliul cu lucrările noastre (înainte / după) va fi disponibil în curând.</p>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: var(--space-2xl) var(--space-md);
+  }
+  h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-slate-900);
+  }
+  p {
+    color: var(--color-slate-700);
+  }
+  @media (min-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+  }
+</style>

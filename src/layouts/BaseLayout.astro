@@ -5,6 +5,9 @@
 import { Font } from 'astro:assets';
 import { business } from '../data/business';
 import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import StickyCta from '../components/StickyCta.astro';
+import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -39,6 +42,27 @@ const CF_BEACON_TOKEN = 'CF_WEB_ANALYTICS_TOKEN_PLACEHOLDER';
     ></script>
   </head>
   <body>
-    <slot />
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <StickyCta />
+    <Footer />
   </body>
 </html>
+
+<style>
+  /* Occlusion guard (D-06): reserve space below the footer equal to the fixed
+     sticky CTA bar height (~56px) + iOS safe-area inset, so the bar never hides
+     the footer or bottom tap targets. */
+  body {
+    padding-bottom: calc(56px + env(safe-area-inset-bottom));
+  }
+
+  /* On desktop the CTA floats with a bottom margin, so reserve a bit more. */
+  @media (min-width: 768px) {
+    body {
+      padding-bottom: calc(56px + var(--space-md) + env(safe-area-inset-bottom));
+    }
+  }
+</style>

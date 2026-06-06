@@ -1,0 +1,71 @@
+---
+// Contact route — the header "Contact" button lands here. Surfaces the NAP
+// contact affordances from business.ts (D-15) so the page is useful even before
+// the richer Phase 3 contact content lands.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { business } from '../data/business';
+---
+
+<BaseLayout title="Contact — Renovart Interiors">
+  <div class="page">
+    <h1>Contact</h1>
+    <p>Ne puteți contacta direct prin oricare dintre următoarele:</p>
+
+    <ul class="contacts">
+      <li>
+        Telefon: <a href={business.telHref}>{business.phoneDisplay}</a>
+      </li>
+      <li>
+        WhatsApp: <a href={business.whatsappHref}>Scrieți-ne pe WhatsApp</a>
+      </li>
+      <li>
+        Email: <a href={`mailto:${business.email}`}>{business.email}</a>
+      </li>
+    </ul>
+
+    <p class="meta">{business.address}</p>
+    <p class="meta">Program: {business.hours}</p>
+    <p class="meta">Zonă deservită: {business.serviceArea}</p>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: var(--space-2xl) var(--space-md);
+  }
+  h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-slate-900);
+  }
+  p {
+    color: var(--color-slate-700);
+  }
+  .contacts {
+    list-style: none;
+    margin: var(--space-md) 0;
+    padding: 0;
+  }
+  .contacts li {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    color: var(--color-slate-700);
+  }
+  .contacts a {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+  .meta {
+    margin: 0;
+    color: var(--color-slate-500);
+  }
+  @media (min-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+  }
+</style>

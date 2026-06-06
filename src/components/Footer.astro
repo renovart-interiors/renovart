@@ -1,0 +1,101 @@
+---
+// Footer — NAP details + copyright (LAY-03, D-15).
+// Every contact string is read from business.ts; nothing hardcoded here.
+import { business } from '../data/business';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="footer__inner">
+    <p class="footer__brand">{business.name}</p>
+
+    <ul class="footer__contacts">
+      <li>
+        <a href={business.telHref}>{business.phoneDisplay}</a>
+      </li>
+      <li>
+        <a href={business.whatsappHref}>WhatsApp</a>
+      </li>
+      <li>
+        <a href={`mailto:${business.email}`}>{business.email}</a>
+      </li>
+    </ul>
+
+    <p class="footer__meta">{business.address}</p>
+    <p class="footer__meta">Program: {business.hours}</p>
+    <p class="footer__meta">Zonă deservită: {business.serviceArea}</p>
+
+    <p class="footer__copy">
+      © {year} {business.name}. Toate drepturile rezervate.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-slate-900);
+    color: var(--color-on-dark);
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .footer__inner {
+    max-width: 48rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .footer__brand {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.25rem;
+    margin: 0 0 var(--space-sm);
+  }
+
+  .footer__contacts {
+    list-style: none;
+    margin: 0 0 var(--space-md);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .footer__contacts a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    color: var(--color-on-dark);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .footer__contacts a:hover {
+    color: var(--color-accent-300);
+  }
+
+  .footer__meta {
+    margin: 0;
+    color: var(--color-on-dark);
+  }
+
+  .footer__copy {
+    margin: var(--space-md) 0 0;
+    color: var(--color-slate-500);
+    font-size: 0.875rem;
+  }
+
+  /* Doubled focus ring for visibility on the dark footer surface. */
+  .footer__contacts a:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 5px var(--color-accent-300);
+  }
+
+  @media (min-width: 768px) {
+    .footer {
+      padding: var(--space-xl) var(--space-lg);
+    }
+  }
+</style>
