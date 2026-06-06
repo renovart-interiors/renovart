@@ -17,6 +17,12 @@ if (!entry) {
 ---
 
 <BaseLayout title="IMG-01 proof — astro:assets Pattern A">
+  <Fragment slot="head">
+    {/* WR-07: throwaway debug route — keep it out of search indexes while it
+        exists. Phase 2 gate: delete this page, the imgtest collection, and
+        src/content/imgtest/ before shipping. */}
+    <meta name="robots" content="noindex, nofollow" />
+  </Fragment>
   <h1>IMG-01 proof</h1>
   <p>
     Imaginea de mai jos provine dintr-o colecție de conținut, rezolvată prin
