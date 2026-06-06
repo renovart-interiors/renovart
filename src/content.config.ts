@@ -5,7 +5,8 @@
 // - schema is a FUNCTION so the image() helper is in scope; image() resolves the
 //   frontmatter `./`-relative path against the entry file's own directory (Pattern A,
 //   RESEARCH Pitfall 1) → astro:assets emits AVIF/WebP + responsive srcset at build.
-import { defineCollection, z } from 'astro/zod';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
 // THROWAWAY collection: proves the Pattern A image pipeline end-to-end exactly as
