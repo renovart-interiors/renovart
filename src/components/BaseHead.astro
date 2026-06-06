@@ -1,0 +1,32 @@
+---
+// SEO / meta helper. Renders charset, viewport, title, description, and a
+// minimal Open Graph stub. Per-page meta is extended via BaseLayout's
+// <slot name="head" /> (Phase 3 enriches OG/Twitter cards).
+import { business } from '../data/business';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = business.defaultDescription } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? business.domain);
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" href="/favicon.ico" />
+<link rel="canonical" href={canonical.href} />
+
+<title>{title}</title>
+<meta name="description" content={description} />
+
+<!-- Open Graph stub (Phase 3 enriches this) -->
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="ro_RO" />
+<meta property="og:site_name" content={business.name} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical.href} />

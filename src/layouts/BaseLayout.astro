@@ -1,0 +1,44 @@
+---
+// Base shell for every page (LAY-01): <html lang="ro">, per-page meta slot,
+// self-hosted fonts, and the Cloudflare Web Analytics beacon stub.
+// Plan 02 will insert Header / StickyCta / Footer around the default <slot/>.
+import { Font } from 'astro:assets';
+import { business } from '../data/business';
+import BaseHead from '../components/BaseHead.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = business.defaultDescription } = Astro.props;
+
+// LAY-01: token placeholder, swapped for the real Cloudflare token at launch
+// (tracked on the handoff checklist — this is config, not user-facing copy).
+const CF_BEACON_TOKEN = 'CF_WEB_ANALYTICS_TOKEN_PLACEHOLDER';
+---
+
+<!doctype html>
+<html lang="ro">
+  <head>
+    <BaseHead title={title} description={description} />
+
+    {/* Self-hosted fonts (D-03): preload the above-the-fold display face only */}
+    <Font cssVariable="--font-display" preload />
+    <Font cssVariable="--font-body" />
+
+    <slot name="head" />
+
+    {/* Cloudflare Web Analytics — cookieless beacon stub (token placeholder) */}
+    <script
+      is:inline
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon={`{"token": "${CF_BEACON_TOKEN}"}`}
+    ></script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

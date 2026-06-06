@@ -1,17 +1,65 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { business } from '../data/business';
 
+const title = `${business.name} — Renovarea scărilor de bloc în Cluj-Napoca`;
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title={title}>
+  <main class="home">
+    <p class="eyebrow">{business.serviceArea}</p>
+    <h1>Renovăm scări de bloc, profesional și fără bătăi de cap</h1>
+    <p class="lead">
+      {business.name} renovează scările blocurilor din Cluj-Napoca pentru
+      asociații de proprietari și administratori de bloc — lucrări curate,
+      la termen și cu rezultate care se văd.
+    </p>
+    <p class="contact">
+      Sunați-ne la
+      <a href={business.telHref}>{business.phoneDisplay}</a>
+      sau scrieți-ne pe
+      <a href={business.whatsappHref}>WhatsApp</a>.
+    </p>
+  </main>
+</BaseLayout>
+
+<style>
+  .home {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: var(--space-2xl) var(--space-md);
+  }
+
+  .eyebrow {
+    font-family: var(--font-body);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    margin: 0 0 var(--space-sm);
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--color-slate-900);
+  }
+
+  .lead {
+    color: var(--color-slate-700);
+    font-size: 1.125rem;
+  }
+
+  .contact a {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  @media (min-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+  }
+</style>
