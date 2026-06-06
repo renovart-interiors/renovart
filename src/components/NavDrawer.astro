@@ -1,0 +1,195 @@
+---
+// NavDrawer — accessible mobile navigation (D-07, QUA-02).
+// Progressive enhancement: links are real <a> in the DOM and reachable without
+// JS; a ~30-line vanilla <script> adds toggle/Esc/focus-return behavior.
+// Visibility is gated on [data-open="true"] (the toggle button lives in Header).
+import { business } from '../data/business';
+
+const path = Astro.url.pathname;
+// Normalize trailing slash so "/servicii/" and "/servicii" both match.
+const here = path !== '/' && path.endsWith('/') ? path.slice(0, -1) : path;
+
+const links = [
+  { href: '/', label: 'Acasă' },
+  { href: '/servicii', label: 'Servicii' },
+  { href: '/lucrari', label: 'Lucrări' },
+  { href: '/despre', label: 'Despre' },
+];
+---
+
+{/* Overlay + drawer. Hidden by default; revealed via [data-open="true"]. */}
+<div class="overlay" data-overlay hidden></div>
+
+<nav
+  id="navDrawer"
+  class="drawer"
+  aria-label="Navigație principală"
+  data-open="false"
+>
+  <div class="drawer__head">
+    <span class="drawer__brand">{business.name}</span>
+    <button type="button" class="drawer__close" aria-label="Închide meniul" data-drawer-close>
+      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      </svg>
+    </button>
+  </div>
+
+  <ul class="drawer__list">
+    {links.map(({ href, label }) => (
+      <li>
+        <a
+          href={href}
+          class="drawer__link"
+          aria-current={here === href ? 'page' : undefined}
+        >
+          {label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 27, 45, 0.55);
+    z-index: 90;
+  }
+
+  .drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(80vw, 320px);
+    background: var(--color-slate-800);
+    color: var(--color-on-dark);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-md);
+    border-top-left-radius: var(--radius-md);
+    border-bottom-left-radius: var(--radius-md);
+  }
+
+  /* Hidden by default (closed); shown only when opened. */
+  .drawer[data-open='false'] {
+    display: none;
+  }
+
+  .drawer__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 48px;
+  }
+
+  .drawer__brand {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.125rem;
+  }
+
+  .drawer__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: transparent;
+    border: none;
+    color: var(--color-on-dark);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+  }
+
+  .drawer__list {
+    list-style: none;
+    margin: var(--space-md) 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .drawer__link {
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 0 var(--space-sm);
+    color: var(--color-on-dark);
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    border-bottom: 1px solid var(--color-slate-600);
+  }
+
+  .drawer__link:hover {
+    color: var(--color-accent-300);
+  }
+
+  .drawer__link[aria-current='page'] {
+    box-shadow: inset 2px 0 0 0 var(--color-accent-300);
+  }
+
+  /* Doubled focus ring for visibility on the dark drawer surface. */
+  .drawer__close:focus-visible,
+  .drawer__link:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 5px var(--color-accent-300);
+  }
+
+  /* Animate open/close only when motion is welcome. */
+  @media (prefers-reduced-motion: no-preference) {
+    .drawer {
+      transition: transform var(--motion-base);
+    }
+    .drawer[data-open='true'] {
+      animation: drawer-in var(--motion-base);
+    }
+    @keyframes drawer-in {
+      from {
+        transform: translateX(100%);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+  }
+</style>
+
+<script>
+  // ~30-line vanilla drawer controller (the shell's only real UI interaction).
+  const drawer = document.getElementById('navDrawer');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-drawer-toggle]');
+  const overlay = document.querySelector<HTMLElement>('[data-overlay]');
+  const closeBtn = document.querySelector<HTMLButtonElement>('[data-drawer-close]');
+
+  if (drawer && toggle && overlay) {
+    const open = () => {
+      drawer.dataset.open = 'true';
+      overlay.hidden = false;
+      toggle.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+      drawer.querySelector<HTMLElement>('a, button')?.focus();
+    };
+    const close = () => {
+      drawer.dataset.open = 'false';
+      overlay.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      toggle.focus();
+    };
+    toggle.addEventListener('click', () =>
+      drawer.dataset.open === 'true' ? close() : open()
+    );
+    overlay.addEventListener('click', close);
+    closeBtn?.addEventListener('click', close);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && drawer.dataset.open === 'true') close();
+    });
+  }
+</script>
