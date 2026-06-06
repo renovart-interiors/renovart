@@ -80,6 +80,13 @@ const links = [
     display: none;
   }
 
+  /* While closing, keep the panel rendered so the exit animation can run.
+     With reduced-motion (default) there is no animation, so JS flips straight
+     to data-open="false" — this rule only matters when motion is welcome. */
+  .drawer[data-open='closing'] {
+    display: none;
+  }
+
   .drawer__head {
     display: flex;
     align-items: center;
@@ -159,6 +166,20 @@ const links = [
         transform: translateX(0);
       }
     }
+    /* WR-03: keep the panel visible during the exit and slide it out, instead
+       of an abrupt display:none. JS defers the final hide to animationend. */
+    .drawer[data-open='closing'] {
+      display: flex;
+      animation: drawer-out var(--motion-base) forwards;
+    }
+    @keyframes drawer-out {
+      from {
+        transform: translateX(0);
+      }
+      to {
+        transform: translateX(100%);
+      }
+    }
   }
 </style>
 
@@ -177,12 +198,30 @@ const links = [
       document.body.style.overflow = 'hidden';
       drawer.querySelector<HTMLElement>('a, button')?.focus();
     };
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    );
     const close = () => {
-      drawer.dataset.open = 'false';
       overlay.hidden = true;
       toggle.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
       toggle.focus();
+      // WR-03: animate the exit when motion is welcome, deferring the final
+      // display:none to animationend; otherwise hide instantly (no animation
+      // means animationend would never fire).
+      if (prefersReducedMotion.matches) {
+        drawer.dataset.open = 'false';
+        return;
+      }
+      drawer.dataset.open = 'closing';
+      drawer.addEventListener(
+        'animationend',
+        () => {
+          // Guard against a re-open landing before the exit finished.
+          if (drawer.dataset.open === 'closing') drawer.dataset.open = 'false';
+        },
+        { once: true }
+      );
     };
     toggle.addEventListener('click', () =>
       drawer.dataset.open === 'true' ? close() : open()
