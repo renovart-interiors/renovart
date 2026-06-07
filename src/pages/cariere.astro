@@ -1,0 +1,233 @@
+---
+// /cariere — "Locuri de muncă" recruiting page (CAR-01, D-07..D-10).
+// Static, ro-RO, AEO-extractable (semantic h1→h2 blocks), NO form. All contact
+// actions come from the single-source NAP module (business.ts) — tel:, careers
+// WhatsApp prefill, and mailto. Reuses BaseLayout + design tokens (UI-SPEC).
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { business } from '../data/business';
+---
+
+<BaseLayout title="Locuri de muncă — Renovart Interiors">
+  <div class="page">
+    <header class="intro">
+      <h1>Locuri de muncă</h1>
+      <p class="lead">
+        Angajăm zugravi-finisori și muncitori finisori pentru lucrări de renovare
+        a scărilor de bloc în Cluj-Napoca și împrejurimi.
+      </p>
+    </header>
+
+    <section class="block" aria-labelledby="cautam">
+      <h2 id="cautam">Ce căutăm</h2>
+      <p>Oameni serioși care se pricep la tot ce ține de renovarea casei scării:</p>
+      <ul class="list">
+        <li>zugrăveli pereți și tavan</li>
+        <li>glet și pregătirea suprafețelor</li>
+        <li>finisaje interioare</li>
+        <li>vopsire trepte și mână curentă</li>
+        <li>lambriu și finisaje de palier</li>
+      </ul>
+    </section>
+
+    <section class="block block--surface" aria-labelledby="oferim">
+      <h2 id="oferim">Ce oferim</h2>
+      <ul class="list">
+        <li>Plată corectă și la timp</li>
+        <li>Lucrări constante în Cluj-Napoca și împrejurimi</li>
+        <li>Echipă serioasă</li>
+      </ul>
+    </section>
+
+    <section class="block" aria-labelledby="aplici">
+      <h2 id="aplici">Cum aplici</h2>
+      <p class="apply-instruction">
+        Sună, scrie-ne pe WhatsApp sau trimite un email — îți răspundem rapid.
+      </p>
+
+      <div class="cta-cluster">
+        <a
+          class="apply-btn apply-btn--call"
+          href={business.telHref}
+          aria-label={`Sună la ${business.phoneDisplay}`}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path
+              d="M6.6 10.8a15.9 15.9 0 006.6 6.6l2.2-2.2a1 1 0 011-.24 11.3 11.3 0 003.6.58 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.3 11.3 0 00.58 3.6 1 1 0 01-.24 1L6.6 10.8z"
+              fill="currentColor"
+            />
+          </svg>
+          <span>Sună</span>
+        </a>
+
+        <a
+          class="apply-btn apply-btn--wa"
+          href={business.whatsappCareersHref}
+          aria-label="Scrie-ne pe WhatsApp despre un loc de muncă"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path
+              d="M12 2a10 10 0 00-8.6 15l-1.4 5 5.1-1.3A10 10 0 1012 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.1.1.3 0 .5l-.4.5c-.2.2-.3.3-.1.6.1.3.7 1.1 1.4 1.8 1 .8 1.7 1.1 2 1.2.2.1.4.1.5-.1l.7-.8c.2-.2.3-.2.6-.1l1.9.9c.3.1.4.2.5.3.1.2.1.7-.1 1.3z"
+              fill="currentColor"
+            />
+          </svg>
+          <span>WhatsApp</span>
+        </a>
+
+        <a
+          class="apply-btn apply-btn--email"
+          href={`mailto:${business.email}`}
+          aria-label={`Trimite un email la ${business.email}`}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path
+              d="M3 5h18a1 1 0 011 1v12a1 1 0 01-1 1H3a1 1 0 01-1-1V6a1 1 0 011-1zm1.4 2L12 12.2 19.6 7H4.4zM20 8.3l-7.4 5.1a1 1 0 01-1.2 0L4 8.3V17h16V8.3z"
+              fill="currentColor"
+            />
+          </svg>
+          <span>Email</span>
+        </a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: var(--space-2xl) var(--space-md);
+  }
+
+  .intro {
+    margin-bottom: var(--space-xl);
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-slate-900);
+    margin: 0 0 var(--space-md);
+  }
+
+  .lead {
+    font-size: 1rem;
+    color: var(--color-slate-700);
+    margin: 0;
+    max-width: 60ch;
+  }
+
+  .block {
+    margin-top: var(--space-xl);
+  }
+
+  /* Optional warm band behind one section (UI-SPEC) — pull to full content width. */
+  .block--surface {
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    margin-top: var(--space-2xl);
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--color-slate-900);
+    margin: 0 0 var(--space-md);
+  }
+
+  .block p {
+    color: var(--color-slate-700);
+    margin: 0 0 var(--space-md);
+    max-width: 60ch;
+  }
+
+  .list {
+    margin: 0;
+    padding-left: var(--space-lg);
+    color: var(--color-slate-700);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .apply-instruction {
+    color: var(--color-slate-700);
+  }
+
+  .cta-cluster {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin-top: var(--space-md);
+  }
+
+  .apply-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    min-height: 56px;
+    padding: 0 var(--space-md);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.01em;
+  }
+
+  .apply-btn--call {
+    background: var(--color-accent);
+    color: var(--color-on-dark);
+  }
+  .apply-btn--call:hover {
+    background: var(--color-accent-hover);
+  }
+
+  .apply-btn--wa {
+    background: var(--color-whatsapp);
+    color: var(--color-on-dark);
+  }
+  .apply-btn--wa:hover {
+    background: var(--color-whatsapp-hover);
+  }
+
+  /* Secondary treatment — slate outline, NOT a third filled accent (keep terracotta scarce). */
+  .apply-btn--email {
+    background: transparent;
+    color: var(--color-slate-900);
+    border: 1px solid var(--color-slate-600);
+  }
+  .apply-btn--email:hover {
+    background: var(--color-surface);
+  }
+
+  /* Inherited global :focus-visible ring applies; ensure it's never removed. */
+
+  @media (min-width: 768px) {
+    .page {
+      padding: var(--space-3xl) var(--space-lg);
+    }
+    h1 {
+      font-size: 2rem;
+    }
+    h2 {
+      font-size: 1.75rem;
+    }
+    .block {
+      margin-top: var(--space-2xl);
+    }
+    .cta-cluster {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+    }
+    .apply-btn {
+      flex: 1 1 auto;
+    }
+  }
+</style>
