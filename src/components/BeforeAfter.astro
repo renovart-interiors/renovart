@@ -32,7 +32,12 @@ const {
 } = Astro.props;
 ---
 
-<figure class="ba" data-ba style="--pos: 50%;">
+<figure
+  class="ba"
+  data-ba
+  style="--pos: 50%;"
+  aria-label="Comparație înainte și după"
+>
   {/* BEFORE — bottom layer / left cell in the no-JS fallback */}
   <div class="ba__img ba__before">
     <Picture
