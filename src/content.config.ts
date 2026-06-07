@@ -5,10 +5,19 @@
 //   GenerateContentTypesError trap — see 01-03-SUMMARY.md).
 // - `z` is imported from 'astro/zod' (NO separate zod install — avoids version drift).
 // - `glob` is imported from 'astro/loaders'.
-// - schema is a FUNCTION so the image() helper is in scope; image() resolves the
-//   frontmatter `./`-relative path against the entry file's own directory (Pattern A)
-//   → astro:assets emits AVIF/WebP + responsive srcset at build (fail-closed on a
-//   bad/missing path).
+//
+// IMAGE MODEL — Phase 4 migration (D-01/D-02, RESEARCH Pattern 1 + Pitfall 3):
+// The image fields are plain `z.string()` paths, NOT Astro's `image()` helper, and the
+// schema function is `() =>` (no `({ image })`). WHY:
+//   - D-01 requires a SINGLE shared media folder (`src/assets/lucrari/`) fed by Pages CMS,
+//     not per-entry co-located `./`-relative images.
+//   - `image()` resolves ONLY `./`-relative paths against each entry's own directory, so it
+//     structurally cannot express a shared-folder reference written by the CMS (Pitfall 3:
+//     re-adding `image()` for any CMS-fed field re-introduces the import trap / build error).
+//   - Instead the CMS writes a stable `/src/assets/lucrari/<file>` string; at render time
+//     `src/lib/resolveLucrareImage.ts` resolves it via `import.meta.glob` to `ImageMetadata`,
+//     so `astro:assets` still emits AVIF/WebP + responsive srcset (D-02). Fail-closed: a bad
+//     path throws at build (the glob map is fully resolved at build time).
 import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
@@ -19,17 +28,25 @@ import { glob } from 'astro/loaders';
 // project (.md) and the demo before/after project (.mdx) both load.
 const lucrari = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/lucrari' }),
-  schema: ({ image }) =>
+  schema: () =>
     z.object({
       title: z.string(),
       location: z.string(),
       date: z.coerce.date(), // ISO YYYY-MM-DD → Date (CMS-friendly)
+      // category stays optional in the schema but is HIDDEN from the CMS form (D-08):
+      // no filtering UI consumes it yet; keeping it here avoids a future schema churn.
       category: z.enum(['scara-bloc', 'palier', 'fatada-interioara']).optional(),
-      coverImage: image(),
-      afterImages: z.array(image()), // REQUIRED (D-12)
-      beforeImages: z.array(image()).optional(), // OPTIONAL (D-12): only matched
-      // before+after pairs drive the slider; after-only → gallery.
-      featured: z.boolean().default(false), // seed entries may omit it
+      // String paths rooted at /src/assets/lucrari/ — resolved via import.meta.glob
+      // (resolveLucrareImage) into ImageMetadata at render. See header note (Pitfall 3).
+      coverImage: z.string(),
+      // Before/after comparisons (slider). The paired object shape makes before↔after
+      // misalignment structurally impossible in the CMS (D-04). Empty → no slider.
+      pairs: z.array(z.object({ before: z.string(), after: z.string() })).default([]),
+      // After-only photos (gallery, D-05). An entry with pairs:[] + a populated gallery
+      // is the after-only case (the real Cluj project) — renders the gallery, not a
+      // broken/empty slider.
+      gallery: z.array(z.string()).default([]),
+      featured: z.boolean().default(false), // owner-controlled homepage toggle (D-08)
     }),
 });
 
