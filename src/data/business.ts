@@ -5,12 +5,16 @@ const PHONE_DISPLAY = '+40 757 656 989'; // human-readable (D-11)
 const PHONE_TEL = '+40757656989'; // tel: form — keep the leading + (D-11)
 const PHONE_WA = '40757656989'; // wa.me path — NO +, NO spaces (D-12)
 const WA_MESSAGE = 'Bună ziua, aș dori detalii despre renovarea scării de bloc.'; // D-12
+// Careers-tailored WhatsApp prefill for job applicants (CAR-01 / D-09) — same number, applicant framing.
+const WA_CAREERS = 'Bună ziua, sunt interesat(ă) de un loc de muncă (zugrav-finisor) la Renovart Interiors.';
 
 export const business = {
   name: 'Renovart Interiors', // REAL brand (D-10)
   phoneDisplay: PHONE_DISPLAY,
   telHref: `tel:${PHONE_TEL}`,
   whatsappHref: `https://wa.me/${PHONE_WA}?text=${encodeURIComponent(WA_MESSAGE)}`,
+  // Careers WhatsApp link (CAR-01) — reuses the existing PHONE_WA; applicant-tailored message.
+  whatsappCareersHref: `https://wa.me/${PHONE_WA}?text=${encodeURIComponent(WA_CAREERS)}`,
   // Realistic Cluj-Napoca placeholders (D-13) — tracked on the launch/handoff checklist:
   email: 'contact@nume-firma.ro',
   address: 'Str. Exemplu nr. 10, Cluj-Napoca, Cluj',
