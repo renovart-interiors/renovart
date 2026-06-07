@@ -6,9 +6,11 @@
 // — that method is removed for glob-loader collections; RESEARCH Pitfall 1).
 // getStaticPaths maps params.slug = entry.id (glob derives id from the dir name).
 //
-// Conditional media render (D-12): a project with index-aligned before/after pairs
-// shows the slider; an after-only project (the real D-11 project) shows an accessible
-// mixed-orientation gallery. A broken/empty slider is NEVER rendered.
+// Conditional media render (D-05): a project with before/after `pairs` shows the
+// slider; an after-only project (pairs:[] + populated `gallery`, the real Cluj
+// project) shows an accessible mixed-orientation gallery. A broken/empty slider is
+// NEVER rendered. Image fields are /src/assets/lucrari/ strings resolved via the
+// import.meta.glob bridge (resolveLucrareImage) so astro:assets still optimizes them.
 //
 // Breadcrumb DOM was shipped in Phase 2; the matching BreadcrumbList JSON-LD
 // <script> is now emitted here (Phase 3, SEO-05) — Acasă → Lucrări → {title},
@@ -19,6 +21,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import BeforeAfter from '../../components/BeforeAfter.astro';
 import JsonLd from '../../components/JsonLd.astro';
 import { breadcrumbList } from '../../data/schema';
+import { resolveLucrareImage } from '../../lib/resolveLucrareImage';
 
 export async function getStaticPaths() {
   const entries = await getCollection('lucrari');
@@ -30,7 +33,20 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry); // Astro 6 standalone render() → MDX body
-const { title, location, date, beforeImages, afterImages } = entry.data;
+const { title, location, date, pairs, gallery } = entry.data;
+
+// D-05 invariant: render the slider IFF before/after pairs exist; otherwise the
+// gallery — never a broken/empty slider. Image fields are /src/assets/lucrari/
+// strings (D-02); resolve them through the import.meta.glob bridge into
+// ImageMetadata at build so <Picture>/<BeforeAfter> still emit AVIF/WebP + srcset.
+const hasPairs = pairs.length > 0;
+const resolvedPairs = await Promise.all(
+  pairs.map(async (p) => ({
+    before: await resolveLucrareImage(p.before),
+    after: await resolveLucrareImage(p.after),
+  })),
+);
+const resolvedGallery = await Promise.all(gallery.map((g) => resolveLucrareImage(g)));
 
 // BreadcrumbList JSON-LD (SEO-05) matching the breadcrumb DOM below. The final
 // crumb (current page) has no `url`, so breadcrumbList emits no `item` for it.
@@ -45,12 +61,6 @@ const dateLabel = new Intl.DateTimeFormat('ro-RO', {
   year: 'numeric',
   month: 'long',
 }).format(date);
-
-// D-12: slider ONLY when aligned before/after pairs exist; else gallery.
-const hasPairs =
-  Array.isArray(beforeImages) &&
-  beforeImages.length > 0 &&
-  beforeImages.length === afterImages.length;
 
 // Factual ro-RO alt texts for the real D-11 gallery photos, keyed by filename
 // (02-UI-SPEC §Gallery alt-text guidance — describe what the photos actually show,
@@ -98,16 +108,13 @@ const galleryAlt = (img: { src: string }, i: number): string => {
     {
       hasPairs ? (
         <section class="media media--pairs" aria-label="Comparație înainte și după">
-          {beforeImages!.map((before, i) => {
-            // hasPairs guarantees an aligned after for every before; the explicit
-            // guard satisfies noUncheckedIndexedAccess and is defence-in-depth.
-            const after = afterImages[i];
-            return after ? <BeforeAfter before={before} after={after} /> : null;
-          })}
+          {resolvedPairs.map((p) => (
+            <BeforeAfter before={p.before} after={p.after} />
+          ))}
         </section>
       ) : (
         <ul class="gallery" aria-label="Galerie foto — lucrarea finalizată">
-          {afterImages.map((img, i) => (
+          {resolvedGallery.map((img, i) => (
             <li class="gallery__item">
               <Picture
                 src={img}

@@ -9,6 +9,7 @@
 // phase; it lands in Phase 3.
 import { Picture } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import { resolveLucrareImage } from '../lib/resolveLucrareImage';
 
 interface Props {
   entry: CollectionEntry<'lucrari'>;
@@ -16,6 +17,11 @@ interface Props {
 
 const { entry } = Astro.props;
 const { title, location, date, coverImage } = entry.data;
+
+// coverImage is now a /src/assets/lucrari/ string (D-02); resolve it via the
+// import.meta.glob bridge into ImageMetadata so <Picture> keeps AVIF/WebP + srcset
+// (Pitfall 2: never a raw <img>). Callers (grid + home featured) still pass `entry`.
+const cover = await resolveLucrareImage(coverImage);
 
 const dateLabel = new Intl.DateTimeFormat('ro-RO', {
   year: 'numeric',
@@ -26,7 +32,7 @@ const dateLabel = new Intl.DateTimeFormat('ro-RO', {
 <a class="card" href={`/lucrari/${entry.id}`}>
   <div class="card__media">
     <Picture
-      src={coverImage}
+      src={cover}
       formats={['avif', 'webp']}
       widths={[400, 800]}
       sizes="(max-width: 768px) 100vw, 33vw"
