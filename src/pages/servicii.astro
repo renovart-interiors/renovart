@@ -1,33 +1,274 @@
 ---
-// Placeholder route (D-09) — real content arrives in Phases 2–3. Exists so the
-// shell nav has no dead links / 404s.
+// /servicii — full Servicii page (PAG-02, COP-01/02, SEO-01/02/04).
+// Renders the six services as scannable semantic blocks from the single-source
+// services.ts (no drift with the JSON-LD), each with a decorative inline-SVG
+// icon (aria-hidden), and emits a valid Service node (serviceType +
+// hasOfferCatalog of the six offerings). All NAP/CTAs come from business.ts;
+// styles use inherited tokens only (no new custom properties). Zero new JS.
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { business } from '../data/business';
+import { services } from '../data/services';
+import { homeAndConstructionBusiness, serviceSchema } from '../data/schema';
+import JsonLd from '../components/JsonLd.astro';
+
+// SEO-04: emit a @graph so the Service's provider @id resolves locally for
+// validators (RESEARCH Pitfall 5). Business node + Service node share one
+// script; @context applied once at the root.
+const graph = {
+  '@context': 'https://schema.org',
+  '@graph': [homeAndConstructionBusiness(), serviceSchema(services)],
+};
+
+// Decorative inline-SVG glyphs keyed by services.ts `icon`. aria-hidden +
+// focusable=false — the heading carries the accessible name (UI-SPEC a11y).
+const iconPaths: Record<string, string> = {
+  paint:
+    'M5 3h12a2 2 0 012 2v4a2 2 0 01-2 2H7v2h2a2 2 0 012 2v5a2 2 0 01-2 2H8a2 2 0 01-2-2v-5H5a2 2 0 01-2-2V5a2 2 0 012-2zm0 2v4h12V5H5z',
+  stairs:
+    'M3 21v-4h4v-4h4V9h4V5h4v2h-2v4h-4v4H9v4H5v2H3z',
+  rail: 'M3 17h18v2H3v-2zm2-2 14-8 1 1.7L6 16.7 5 15zm0 0v6H3v-7l2 1zm14-8v6h2V6.3L19 7z',
+  door: 'M5 3h14a1 1 0 011 1v17H4V4a1 1 0 011-1zm1 2v14h12V5H6zm9 6h2v2h-2v-2z',
+  bulb: 'M9 21h6v-1H9v1zm3-19a7 7 0 00-4 12.7V18h8v-3.3A7 7 0 0012 2zm0 2a5 5 0 013 9v3h-6v-3a5 5 0 013-9z',
+  shield: 'M12 2l8 3v6c0 5-3.4 8.7-8 11-4.6-2.3-8-6-8-11V5l8-3zm0 2.2L6 6.3V11c0 3.8 2.4 6.7 6 8.6 3.6-1.9 6-4.8 6-8.6V6.3l-6-2.1z',
+};
+const fallbackIcon = 'M12 2l3 7h7l-5.5 4 2 7-6.5-4.3L5.5 22l2-7L2 9h7l3-7z';
 ---
 
-<BaseLayout title="Servicii — Renovart Interiors">
+<BaseLayout
+  title={`Servicii — ${business.name}`}
+  description="Servicii de renovare a scărilor de bloc în Cluj-Napoca: zugrăveli, reparații trepte, balustrade, tâmplărie, instalații electrice și hidroizolații."
+>
+  <JsonLd slot="head" data={graph} />
+
   <div class="page">
-    <h1>Servicii</h1>
-    <p>Conținutul detaliat al serviciilor va fi disponibil în curând.</p>
+    <div class="intro">
+      <h1>Servicii</h1>
+      <p class="lead">
+        Renovăm complet casa scării blocurilor din Cluj-Napoca și împrejurimi.
+        Mai jos găsiți, pe scurt, ce includem într-o lucrare — de la zugrăveli
+        până la hidroizolații.
+      </p>
+    </div>
+
+    <ul class="grid" role="list">
+      {
+        services.map((s) => (
+          <li>
+            <article class="service">
+              <span class="service__icon">
+                <svg
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path d={iconPaths[s.icon ?? ''] ?? fallbackIcon} fill="currentColor" />
+                </svg>
+              </span>
+              <h2 class="service__title">{s.title}</h2>
+              <p class="service__desc">{s.description}</p>
+            </article>
+          </li>
+        ))
+      }
+    </ul>
+
+    <section class="closing" aria-labelledby="cta-heading">
+      <h2 id="cta-heading">Discutăm despre scara dumneavoastră?</h2>
+      <p class="closing__lead">
+        Sunați sau scrieți-ne pe WhatsApp — vă răspundem rapid și stabilim o
+        evaluare la fața locului, cu deviz clar.
+      </p>
+
+      <div class="cta-cluster">
+        <a
+          class="cta-btn cta-btn--call"
+          href={business.telHref}
+          aria-label={`Sună la ${business.phoneDisplay}`}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path
+              d="M6.6 10.8a15.9 15.9 0 006.6 6.6l2.2-2.2a1 1 0 011-.24 11.3 11.3 0 003.6.58 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.3 11.3 0 00.58 3.6 1 1 0 01-.24 1L6.6 10.8z"
+              fill="currentColor"
+            />
+          </svg>
+          <span>Sună</span>
+        </a>
+
+        <a
+          class="cta-btn cta-btn--wa"
+          href={business.whatsappHref}
+          aria-label="Scrie-ne pe WhatsApp despre renovarea scării"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path
+              d="M12 2a10 10 0 00-8.6 15l-1.4 5 5.1-1.3A10 10 0 1012 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.1.1.3 0 .5l-.4.5c-.2.2-.3.3-.1.6.1.3.7 1.1 1.4 1.8 1 .8 1.7 1.1 2 1.2.2.1.4.1.5-.1l.7-.8c.2-.2.3-.2.6-.1l1.9.9c.3.1.4.2.5.3.1.2.1.7-.1 1.3z"
+              fill="currentColor"
+            />
+          </svg>
+          <span>WhatsApp</span>
+        </a>
+      </div>
+    </section>
   </div>
 </BaseLayout>
 
 <style>
   .page {
-    max-width: 48rem;
+    max-width: 70ch;
     margin: 0 auto;
     padding: var(--space-2xl) var(--space-md);
   }
+
+  .intro {
+    margin-bottom: var(--space-xl);
+  }
+
   h1 {
+    font-family: var(--font-display);
     font-size: 1.75rem;
     font-weight: 700;
+    line-height: 1.2;
     color: var(--color-slate-900);
+    margin: 0 0 var(--space-md);
   }
-  p {
+
+  .lead {
+    font-size: 1rem;
     color: var(--color-slate-700);
+    margin: 0;
+    max-width: 60ch;
   }
+
+  .grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-md);
+  }
+
+  .grid > li {
+    display: flex;
+  }
+
+  .service {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    background: var(--color-surface);
+    border: 1px solid var(--color-slate-600);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .service__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    color: var(--color-accent);
+    background: var(--color-bg);
+  }
+
+  .service__title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--color-slate-900);
+    margin: 0;
+  }
+
+  .service__desc {
+    font-size: 1rem;
+    color: var(--color-slate-700);
+    margin: 0;
+  }
+
+  .closing {
+    margin-top: var(--space-2xl);
+  }
+
+  .closing h2 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--color-slate-900);
+    margin: 0 0 var(--space-md);
+  }
+
+  .closing__lead {
+    color: var(--color-slate-700);
+    margin: 0 0 var(--space-md);
+    max-width: 60ch;
+  }
+
+  .cta-cluster {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    min-height: 56px;
+    padding: 0 var(--space-md);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.01em;
+  }
+
+  .cta-btn--call {
+    background: var(--color-accent);
+    color: var(--color-on-dark);
+  }
+  .cta-btn--call:hover {
+    background: var(--color-accent-hover);
+  }
+
+  .cta-btn--wa {
+    background: var(--color-whatsapp);
+    color: var(--color-on-dark);
+  }
+  .cta-btn--wa:hover {
+    background: var(--color-whatsapp-hover);
+  }
+
   @media (min-width: 768px) {
+    .page {
+      max-width: 75rem;
+      padding: var(--space-3xl) var(--space-lg);
+    }
     h1 {
       font-size: 2rem;
+    }
+    .closing h2 {
+      font-size: 1.75rem;
+    }
+    .grid {
+      gap: var(--space-lg);
+    }
+    .cta-cluster {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+    .cta-btn {
+      flex: 1 1 auto;
+      max-width: 16rem;
     }
   }
 </style>
