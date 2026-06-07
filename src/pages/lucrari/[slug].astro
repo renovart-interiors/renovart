@@ -67,7 +67,9 @@ const galleryAlt = (img: { src: string }, i: number): string => {
     <nav aria-label="Breadcrumb" class="crumbs">
       <ol>
         <li><a href="/">Acasă</a></li>
+        <li class="crumbs__sep" aria-hidden="true">›</li>
         <li><a href="/lucrari">Lucrări</a></li>
+        <li class="crumbs__sep" aria-hidden="true">›</li>
         <li aria-current="page">{title}</li>
       </ol>
     </nav>
@@ -141,9 +143,9 @@ const galleryAlt = (img: { src: string }, i: number): string => {
     align-items: center;
   }
 
-  /* Separator between crumbs. */
-  .crumbs li + li::before {
-    content: '›';
+  /* WR-02: separator is an explicit aria-hidden <li> (not a CSS ::before),
+     so VoiceOver/NVDA never announce the decorative '›' glyph. */
+  .crumbs__sep {
     margin: 0 var(--space-xs);
     color: var(--color-slate-500);
     font-weight: 400;
