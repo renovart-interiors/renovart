@@ -29,3 +29,14 @@ export const business = {
   // before/after share image before handoff (WR-02 / IN-03).
   ogImage: '/og-default.png',
 } as const;
+
+// Trust-stats band values (PAG-01). Kept here so NAP stays single-sourced
+// (serviceAreaLabel reuses business.serviceArea — no duplication).
+// LAUNCH CHECKLIST: yearsExperience and worksCompleted are conservative
+// owner-supplied placeholders — confirm the real numbers with the client
+// before handoff. Do NOT inflate.
+export const trust = {
+  yearsExperience: 'peste 10',
+  worksCompleted: 'zeci de',
+  serviceAreaLabel: business.serviceArea,
+} as const;
