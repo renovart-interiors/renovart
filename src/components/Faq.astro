@@ -1,18 +1,23 @@
 ---
 // Visible, always-on FAQ (PAG-05) — zero JS, no accordion, no disclosure widget.
-// Renders the single-source faqCopy collection items as semantic <h3> question
-// + <p> answer pairs so the content is in the static DOM for AEO crawlers and
-// screen readers. The same faqCopy array also feeds faqPageSchema() (no drift).
+// Renders the single-source faqCopy items as semantic <h3> question + <p> answer
+// pairs so the content is in the static DOM for AEO crawlers and screen readers.
+// WR-03: the page passes the SAME already-read `faq` const it feeds to
+// faqPageSchema() in as `items`, so the visible DOM and the FAQPage JSON-LD
+// provably read one shared object (no implicit "both happen to re-read the same
+// collection" — a future filter/sort on one side cannot silently drift).
 // Copy is CMS-editable JSON (src/data/copy/faq.json); array order is preserved.
-import { getCollection } from 'astro:content';
-const faq = (await getCollection('faqCopy')).map((e) => e.data);
+interface Props {
+  items: { question: string; answer: string }[];
+}
+const { items } = Astro.props;
 ---
 
 <section class="faq" aria-labelledby="faq-title">
   <h2 id="faq-title">Întrebări frecvente</h2>
   <div class="faq__list">
     {
-      faq.map((item) => (
+      items.map((item) => (
         <div class="faq__item">
           <h3 class="faq__q">{item.question}</h3>
           <p class="faq__a">{item.answer}</p>

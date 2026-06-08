@@ -157,8 +157,9 @@ const steps = home.steps;
       </p>
     </section>
 
-    <!-- 6. FAQ (renders its own h2 + Q&A) -->
-    <Faq />
+    <!-- 6. FAQ (renders its own h2 + Q&A). Pass the SAME `faq` const fed to
+         faqPageSchema() above so DOM + JSON-LD share one source (WR-03, D-10). -->
+    <Faq items={faq} />
 
     <!-- 7. Closing CTA -->
     <section class="block" aria-labelledby="contact-title">
