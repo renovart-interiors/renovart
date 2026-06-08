@@ -152,4 +152,54 @@ const serviciiCopy = defineCollection({
   }),
 });
 
-export const collections = { lucrari, faqCopy, servicesCopy, trustCopy, homeCopy, serviciiCopy };
+// despreCopy — object format → single entry keyed `main`. The Despre page chrome
+// (story lead + "Cum lucrăm" steps + "De ce noi" bullets + closing CTA) the owner
+// edits via Pages CMS. Despre emits NO JSON-LD — copy is DOM-only. The 3–6 bullet
+// cap (deCeNoiBullets.min(3).max(6)) + `.max()` length caps fail `astro build`
+// (fail-closed, T-05-06) so an over-length / out-of-range CMS edit cannot ship.
+const despreCopy = defineCollection({
+  loader: file('src/data/copy/despre.json'),
+  schema: z.object({
+    headline: z.string().max(60),
+    storyLead: z.string().max(400),
+    cumLucramHeading: z.string().max(60),
+    cumLucramIntro: z.string().max(300),
+    steps: z
+      .array(z.object({ name: z.string().max(30), text: z.string().max(300) }))
+      .min(3)
+      .max(4),
+    deCeNoiHeading: z.string().max(60),
+    deCeNoiIntro: z.string().max(300),
+    deCeNoiBullets: z.array(z.string().max(80)).min(3).max(6),
+    closingHeading: z.string().max(60),
+    closingLead: z.string().max(300),
+    ctaCallLabel: z.string().max(12),
+    ctaWaLabel: z.string().max(12),
+  }),
+});
+
+// contactCopy — object format → single entry keyed `main`. Only the editable
+// marketing chrome lives here (headline, lead, CTA labels). The NAP (address,
+// hours, phone, email, service area) stays in business.ts (LAY-05) — it is NOT
+// duplicated into this JSON. Contact's JSON-LD is business.ts-derived, not copy.
+const contactCopy = defineCollection({
+  loader: file('src/data/copy/contact.json'),
+  schema: z.object({
+    headline: z.string().max(60),
+    lead: z.string().max(220),
+    ctaCallLabel: z.string().max(12),
+    ctaWaLabel: z.string().max(12),
+    ctaEmailLabel: z.string().max(12),
+  }),
+});
+
+export const collections = {
+  lucrari,
+  faqCopy,
+  servicesCopy,
+  trustCopy,
+  homeCopy,
+  serviciiCopy,
+  despreCopy,
+  contactCopy,
+};

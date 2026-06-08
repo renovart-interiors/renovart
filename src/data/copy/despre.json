@@ -1,0 +1,39 @@
+{
+  "main": {
+    "headline": "Despre noi",
+    "storyLead": "Suntem o echipă din Cluj-Napoca care renovează scări de bloc — și care chiar răspunde la telefon. Lucrăm direct cu administratorii și asociațiile de proprietari, vă spunem de la început ce facem, în cât timp și cu ce buget, fără promisiuni umflate. Iar la final lăsăm scara curată: curățenia este inclusă gratuit, de fiecare dată.",
+    "cumLucramHeading": "Cum lucrăm",
+    "cumLucramIntro": "Lucrarea trece prin pași clari, ca să știți tot timpul la ce etapă suntem și ce urmează.",
+    "steps": [
+      {
+        "name": "Evaluare și deviz gratuit",
+        "text": "Venim la fața locului, măsurăm și vă dăm un deviz clar, în scris — gratuit și fără obligații. Fără costuri ascunse."
+      },
+      {
+        "name": "Planificare cu asociația",
+        "text": "Stabilim împreună perioada, etapele și modalitățile de plată, astfel încât accesul locatarilor să fie afectat cât mai puțin."
+      },
+      {
+        "name": "Execuție organizată",
+        "text": "Echipa lucrează curat și ordonat, cu termene scurte și suprafețele protejate. Vă ținem la curent cu progresul."
+      },
+      {
+        "name": "Curățenie și predare",
+        "text": "Facem curățenie inclusă gratuit, predăm scara finalizată și oferim garanție scrisă. Rămânem disponibili dacă apare ceva."
+      }
+    ],
+    "deCeNoiHeading": "De ce ne aleg administratorii",
+    "deCeNoiIntro": "Lucrăm transparent și pe înțelesul unei asociații de proprietari:",
+    "deCeNoiBullets": [
+      "Curățenie inclusă gratuit la fiecare lucrare — nu o plătiți separat",
+      "Deviz gratuit, fără obligații, după o evaluare la fața locului",
+      "Lucrăm direct cu asociațiile, cu comunicare clară și deviz pe etape",
+      "Prețuri competitive și modalități de plată flexibile",
+      "Termene scurte și garanție scrisă pentru lucrările executate"
+    ],
+    "closingHeading": "Hai să vorbim despre scara dumneavoastră",
+    "closingLead": "Sunați-ne sau scrieți-ne pe WhatsApp — vă răspundem rapid și venim pentru o evaluare și un deviz gratuit, fără obligații.",
+    "ctaCallLabel": "Sună",
+    "ctaWaLabel": "WhatsApp"
+  }
+}
