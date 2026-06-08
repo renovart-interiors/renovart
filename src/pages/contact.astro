@@ -10,11 +10,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { business } from '../data/business';
 import { homeAndConstructionBusiness } from '../data/schema';
 import JsonLd from '../components/JsonLd.astro';
-import { getEntry } from 'astro:content';
+import { requireSingleton } from '../lib/requireSingleton';
 
 // Phase 5: editable chrome (h1, lead, CTA labels) from the JSON-backed
-// collection. The NAP <dl> + JSON-LD below stay business.ts-derived (LAY-05).
-const contact = (await getEntry('contactCopy', 'main'))!.data;
+// collection. requireSingleton fails the build with a clear message if the
+// `main` entry is missing/corrupted (CR-02). The NAP <dl> + JSON-LD below stay
+// business.ts-derived (LAY-05).
+const contact = await requireSingleton('contactCopy');
 
 const node = { '@context': 'https://schema.org', ...homeAndConstructionBusiness() };
 ---

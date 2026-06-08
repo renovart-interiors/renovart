@@ -10,7 +10,8 @@
 // Zero new client-side JS, no form element, tokens-only styles (no new CSS tokens).
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { business } from '../data/business';
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import { requireSingleton } from '../lib/requireSingleton';
 import ProjectCard from '../components/ProjectCard.astro';
 import Faq from '../components/Faq.astro';
 import JsonLd from '../components/JsonLd.astro';
@@ -19,10 +20,12 @@ import { homeAndConstructionBusiness, faqPageSchema } from '../data/schema';
 // Phase 5: editable copy from the JSON-backed collections (single source for
 // DOM + JSON-LD, no drift — D-10). Read each ONCE into a const (Pitfall 3).
 // serviceAreaLabel stays derived from business.serviceArea (NAP single-source).
-const home = (await getEntry('homeCopy', 'main'))!.data; // hero + section chrome + steps + closing CTA
+// requireSingleton fails the build with a clear, file-identifying message if the
+// `main` entry is missing/corrupted (CR-02) — never an opaque undefined.data throw.
+const home = await requireSingleton('homeCopy'); // hero + section chrome + steps + closing CTA
 const faq = (await getCollection('faqCopy')).map((e) => e.data);
 const services = (await getCollection('servicesCopy')).map((e) => e.data);
-const trust = (await getEntry('trustCopy', 'main'))!.data;
+const trust = await requireSingleton('trustCopy');
 
 const title = `${business.name} — Renovarea scărilor de bloc în Cluj-Napoca`;
 const description =

@@ -7,7 +7,8 @@
 // styles use inherited tokens only (no new custom properties). Zero new JS.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { business } from '../data/business';
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import { requireSingleton } from '../lib/requireSingleton';
 import { homeAndConstructionBusiness, serviceSchema } from '../data/schema';
 import JsonLd from '../components/JsonLd.astro';
 
@@ -18,7 +19,7 @@ import JsonLd from '../components/JsonLd.astro';
 const services = (await getCollection('servicesCopy')).map((e) => e.data);
 
 // Page chrome (h1, lead, closing CTA copy + labels) from the editable singleton.
-const servicii = (await getEntry('serviciiCopy', 'main'))!.data;
+const servicii = await requireSingleton('serviciiCopy');
 
 // SEO-04: emit a @graph so the Service's provider @id resolves locally for
 // validators (RESEARCH Pitfall 5). Business node + Service node share one

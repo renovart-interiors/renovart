@@ -7,11 +7,12 @@
 // (CONTEXT). All contact actions come from the single-source NAP module.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { business } from '../data/business';
-import { getEntry } from 'astro:content';
+import { requireSingleton } from '../lib/requireSingleton';
 
 // Phase 5: editable copy from the JSON-backed collection (DOM-only — Despre
-// emits no JSON-LD). Read ONCE into a const. NAP/CTA hrefs stay business.ts.
-const despre = (await getEntry('despreCopy', 'main'))!.data;
+// emits no JSON-LD). requireSingleton fails the build with a clear message if
+// the `main` entry is missing/corrupted (CR-02). NAP/CTA hrefs stay business.ts.
+const despre = await requireSingleton('despreCopy');
 
 const title = `Despre — ${business.name}`;
 const description =
