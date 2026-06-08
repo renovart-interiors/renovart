@@ -137,8 +137,54 @@ if (!sitemapIdxXml.includes('https://nume-firma.ro/'))
 if (sitemapIdxXml.includes('github.io'))
   fail('sitemap references github.io — site/base misconfigured');
 
+// --- Copy → DOM → JSON-LD sync probes (COP-03 / CMS-03, D-10, success criterion 4) ---
+// The editable copy JSON files (Plans 05-01..03) are the SINGLE source: the page DOM
+// and the copy-mirrored JSON-LD both read the same object, so they must not drift. A
+// CMS edit that changed only one side would be a regression. These probes pick a stable
+// prefix of an editable string and assert it is present in BOTH the rendered DOM and the
+// JSON-LD on the same page — failing closed on any drift. JSON-LD is JSON-escaped in the
+// HTML (a `"` in copy becomes `\"`), so the probe is escaped the same way before the
+// ld+json check. Zero new deps: node:fs + the same ld+json regex used above.
+
+// Collect every application/ld+json block body on a page, joined for substring search.
+const joinedLd = (html) =>
+  [...html.matchAll(/<script[^>]*application\/ld\+json[^>]*>([\s\S]*?)<\/script>/g)]
+    .map((m) => m[1])
+    .join('');
+
+// First entry of an array-format OR object-format file() copy file.
+const firstEntry = (json) => (Array.isArray(json) ? json[0] : Object.values(json)[0]);
+
+// 8. FAQ answer copy reaches the Home DOM AND the Home FAQPage JSON-LD from one source.
+const faqJsonPath = 'src/data/copy/faq.json';
+if (!existsSync(faqJsonPath)) fail(`${faqJsonPath} missing — copy source for the sync probe is gone`);
+const faqFirst = firstEntry(JSON.parse(readFileSync(faqJsonPath, 'utf8')));
+if (!faqFirst || typeof faqFirst.answer !== 'string')
+  fail(`${faqJsonPath} first entry has no string "answer" — cannot run the FAQ sync probe`);
+const faqProbe = faqFirst.answer.slice(0, 24); // stable prefix
+const homeHtml = readFileSync('dist/index.html', 'utf8');
+if (!homeHtml.includes(faqProbe))
+  fail(`FAQ answer copy not in Home DOM — copy extraction/render broken (probe: "${faqProbe}")`);
+if (!joinedLd(homeHtml).includes(faqProbe.replace(/"/g, '\\"')))
+  fail(`FAQ answer not in Home FAQPage JSON-LD — DOM/JSON-LD drift (D-10) (probe: "${faqProbe}")`);
+
+// 9. Service description copy reaches the Servicii DOM AND the Servicii Service JSON-LD.
+const servicesJsonPath = 'src/data/copy/services.json';
+if (!existsSync(servicesJsonPath))
+  fail(`${servicesJsonPath} missing — copy source for the Service sync probe is gone`);
+const serviceFirst = firstEntry(JSON.parse(readFileSync(servicesJsonPath, 'utf8')));
+if (!serviceFirst || typeof serviceFirst.description !== 'string')
+  fail(`${servicesJsonPath} first entry has no string "description" — cannot run the Service sync probe`);
+const serviceProbe = serviceFirst.description.slice(0, 24);
+const serviciiHtml = readFileSync(serviciiFile, 'utf8');
+if (!serviciiHtml.includes(serviceProbe))
+  fail(`Service description copy not in Servicii DOM — copy extraction/render broken (probe: "${serviceProbe}")`);
+if (!joinedLd(serviciiHtml).includes(serviceProbe.replace(/"/g, '\\"')))
+  fail(`Service description not in Servicii Service JSON-LD — DOM/JSON-LD drift (D-10) (probe: "${serviceProbe}")`);
+
 console.log(
   `ALL_PASS: ${files.length} html files, ${ldCount} JSON-LD blocks valid; no <form> on Contact; ` +
     `no placeholders; expected node types present; ${lucrariPages.length} lucrari page(s) ship optimized ` +
-    `AVIF/WebP+srcset (${optimizedAssets.length} next-gen assets); sitemap emits from nume-firma.ro (no github.io)`,
+    `AVIF/WebP+srcset (${optimizedAssets.length} next-gen assets); sitemap emits from nume-firma.ro (no github.io); ` +
+    `editable copy reaches BOTH DOM and JSON-LD on Home (FAQ answer) and Servicii (service description) — single-source, no drift (D-10)`,
 );
