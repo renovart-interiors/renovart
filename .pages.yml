@@ -270,3 +270,109 @@ content:
             label: Etichetă buton «WhatsApp»
             type: string
             description: 'Maxim 12 caractere.'
+  # despreCopy — Despre page chrome (object-format singleton, `main` key). DOM-only
+  # (Despre emits no JSON-LD). `steps` = object list; `deCeNoiBullets` = plain-string
+  # list (type: string + list: true) so an edit cannot inject markup or break the
+  # heading hierarchy (D-08). No rich-text.
+  - name: despreCopy
+    label: Pagina Despre (texte)
+    type: file
+    path: src/data/copy/despre.json
+    format: json
+    fields:
+      - name: main
+        label: Conținut pagină Despre
+        type: object
+        fields:
+          - name: headline
+            label: Titlu pagină
+            type: string
+            description: 'Maxim ~60 de caractere.'
+          - name: storyLead
+            label: Poveste / intro
+            type: text
+            description: 'Câteva propoziții despre firmă. Maxim ~400 de caractere.'
+          - name: cumLucramHeading
+            label: Titlu secțiune „Cum lucrăm”
+            type: string
+            description: 'Maxim ~60 de caractere.'
+          - name: cumLucramIntro
+            label: Text secțiune „Cum lucrăm”
+            type: text
+            description: 'Maxim ~300 de caractere.'
+          - name: steps
+            label: Pași „Cum lucrăm”
+            type: object
+            list: true
+            description: 'Între 3 și 4 pași. Fiecare cu un nume scurt și o descriere.'
+            fields:
+              - name: name
+                label: Nume pas
+                type: string
+                description: 'Maxim ~30 de caractere.'
+              - name: text
+                label: Descriere pas
+                type: text
+                description: 'Maxim ~300 de caractere.'
+          - name: deCeNoiHeading
+            label: Titlu secțiune „De ce noi”
+            type: string
+            description: 'Maxim ~60 de caractere.'
+          - name: deCeNoiIntro
+            label: Text secțiune „De ce noi”
+            type: text
+            description: 'Maxim ~300 de caractere.'
+          - name: deCeNoiBullets
+            label: Puncte cheie (listă)
+            type: string
+            list: true
+            description: 'Între 3 și 6 puncte, text simplu, maxim ~80 de caractere fiecare.'
+          - name: closingHeading
+            label: Titlu secțiune finală (CTA)
+            type: string
+            description: 'Maxim ~60 de caractere.'
+          - name: closingLead
+            label: Text secțiune finală (CTA)
+            type: text
+            description: 'Maxim ~300 de caractere.'
+          - name: ctaCallLabel
+            label: Etichetă buton «Sună»
+            type: string
+            description: 'Maxim 12 caractere.'
+          - name: ctaWaLabel
+            label: Etichetă buton «WhatsApp»
+            type: string
+            description: 'Maxim 12 caractere.'
+  # contactCopy — Contact page chrome (object-format singleton, `main` key). Only
+  # editable marketing strings live here; the NAP (adresă, program, telefon, email,
+  # zonă) stays in code (business.ts, LAY-05) and is NOT exposed in the CMS.
+  - name: contactCopy
+    label: Pagina Contact (texte)
+    type: file
+    path: src/data/copy/contact.json
+    format: json
+    fields:
+      - name: main
+        label: Conținut pagină Contact
+        type: object
+        fields:
+          - name: headline
+            label: Titlu pagină
+            type: string
+            description: 'Maxim ~60 de caractere.'
+          - name: lead
+            label: Subtitlu
+            type: text
+            description: '1–2 propoziții. Maxim ~220 de caractere.'
+          - name: ctaCallLabel
+            label: Etichetă buton «Sună»
+            type: string
+            description: 'Maxim 12 caractere.'
+          - name: ctaWaLabel
+            label: Etichetă buton «WhatsApp»
+            type: string
+            description: 'Maxim 12 caractere.'
+          - name: ctaEmailLabel
+            label: Etichetă buton «Email»
+            type: string
+            description: 'Maxim 12 caractere.'
