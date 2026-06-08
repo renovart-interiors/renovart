@@ -149,9 +149,12 @@ goes live until all boxes are checked.
 
 ### Pre-launch verification
 
-- [ ] One **real Pages CMS upload round-trip** confirmed before launch — the owner adds
-      or edits a `Lucrare` through Pages CMS and the change appears live (this validates
-      the full CMS → `astro:assets` → deploy path on the real repo).
+- [ ] **BLOCKING:** run one real Pages CMS upload and confirm the `/src/assets/lucrari/...`
+      round-trip (A1) before launch — the owner adds or edits a `Lucrare` through Pages CMS,
+      the written frontmatter path matches the `import.meta.glob` key, and the change appears
+      live after the next build (this validates the full CMS → `astro:assets` → deploy path on
+      the real repo). Deferred from Phase 4; the build-side invariant is already guaranteed by
+      the D-03 smoke test (`npm run verify`), but the live round-trip must be exercised before go-live.
 - [ ] `npm run verify` is green.
 - [ ] One-time manual hardening pass recorded (Lighthouse 95+ mobile, WCAG AA contrast,
-      keyboard nav, visible focus) — D-10/D-11.
+      keyboard nav, visible focus) — D-10/D-11. See `docs/` HUMAN-UAT steps; deferred from Phase 4.
