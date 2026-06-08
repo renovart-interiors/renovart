@@ -20,7 +20,7 @@
 //     path throws at build (the glob map is fully resolved at build time).
 import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
-import { glob } from 'astro/loaders';
+import { glob, file } from 'astro/loaders';
 
 // `lucrari` — the portfolio spine (LUC-01, D-01, D-12). Every downstream surface
 // (grid, detail page, slider, Phase 3 homepage featured pull) reads from this
@@ -62,4 +62,51 @@ const lucrari = defineCollection({
       }),
 });
 
-export const collections = { lucrari };
+// ── Phase 5 editable-copy collections (CMS-03, D-08/D-09/D-10) ──────────────
+// The FAQ, services, and trust marketing copy moves out of TS literals into
+// zod-validated JSON the owner edits via Pages CMS. Each collection is the
+// SINGLE source consumed by BOTH the visible DOM and the JSON-LD factories in
+// schema.ts (no drift). `file()` (not `image()`) — these carry no images.
+// A malformed/over-length CMS edit fails `astro build` (fail-closed, T-05-01).
+// `.max()` caps mirror the UI-SPEC hard limits.
+
+// faqCopy — array of {id, question, answer}; file() uses `id` as each entry id.
+// 5 items today (garanție · deviz · termene · plată · zonă). The payment answer
+// uses the D-03 soft register only (no invoicing/tax language).
+const faqCopy = defineCollection({
+  loader: file('src/data/copy/faq.json'),
+  schema: z.object({
+    question: z.string().max(80),
+    answer: z.string().max(600),
+  }),
+});
+
+// servicesCopy — array of {slug, title, description, icon}; `slug` is the entry id.
+// EXPECT exactly the 6 known services; `icon` is a fixed enum (RESEARCH Open Q3)
+// so an arbitrary owner value fails the build rather than rendering the fallback
+// glyph. slug stays code-stable (the CMS form labels it "nu modificați").
+const servicesCopy = defineCollection({
+  loader: file('src/data/copy/services.json'),
+  schema: z.object({
+    slug: z.string(),
+    title: z.string().max(60),
+    description: z.string().max(400),
+    icon: z.enum(['paint', 'stairs', 'rail', 'door', 'bulb', 'shield']),
+  }),
+});
+
+// trustCopy — object format → single entry keyed `main`. warrantyText carries the
+// qualitative phrasing (D-04); warrantyMonths/turnaroundDays are optional and
+// empty by default (D-05) — owner fills real numbers later via one CMS edit.
+const trustCopy = defineCollection({
+  loader: file('src/data/copy/trust.json'),
+  schema: z.object({
+    yearsExperience: z.string().max(16),
+    worksCompleted: z.string().max(16),
+    warrantyText: z.string(),
+    warrantyMonths: z.string().optional(),
+    turnaroundDays: z.string().optional(),
+  }),
+});
+
+export const collections = { lucrari, faqCopy, servicesCopy, trustCopy };
