@@ -136,10 +136,34 @@ goes live until all boxes are checked.
       replace `public/og-default.png` with a **real branded before/after share image**
       (1200×630)
 
-### Trust stats — `src/data/business.ts` (`trust`)
+### Trust stats — `src/data/copy/trust.json`
 
 - [ ] `yearsExperience` — `peste 10` → real, confirmed number (do NOT inflate)
 - [ ] `worksCompleted` — `zeci de` → real, confirmed number
+
+### Copy claims — qualitative → real numbers (D-05)
+
+The marketing copy ships **deliberately qualitative** (D-04): no warranty month
+count, no execution-day count, no prices (D-06). These are **intentional, not bugs** —
+the owner adds real numbers later when he commits to them, via a **one-field Pages CMS
+edit** (the copy lives in editable JSON, see `docs/GHID-CLIENT.md`). Confirm each item
+below before or shortly after launch; until confirmed, leave the qualitative phrasing.
+
+- [ ] **Warranty number** — `src/data/copy/trust.json` currently has no `warrantyMonths`;
+      `warrantyText` reads `garanție scrisă pentru toate lucrările`. Add a real
+      `warrantyMonths` (e.g. `24`) **only once the owner confirms it**; until then the
+      qualitative phrasing stands. (Market norm seen in research: 12–24 luni — do NOT
+      ship that as a number until confirmed.)
+- [ ] **Turnaround number** — `src/data/copy/trust.json` has no `turnaroundDays`;
+      copy reads `termene scurte`. Add a real range (e.g. `3–7 zile lucrătoare`) **only
+      once confirmed**. Until then the qualitative phrasing stands.
+- [ ] **No prices (D-06)** — confirm **no price/sumă** is published anywhere in
+      `src/data/copy/*.json`. Positioning stays `prețuri competitive` + `deviz gratuit`;
+      this is a deliberate market-norm decision, not a missing value. Do not add a price
+      list or per-apartment figure.
+
+> These three are swapped via **Pages CMS** (editing the copy fields), **not in code** —
+> the owner can do it himself once he has confirmed numbers.
 
 ### Imagery — `src/assets/lucrari/`
 

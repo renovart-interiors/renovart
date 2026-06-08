@@ -99,7 +99,54 @@ bifați pe toate.
 
 ---
 
-## 7. Dacă o modificare nu apare
+## 7. Cum modificați textele de pe pagini
+
+Pe lângă lucrări, puteți edita și **textele de prezentare** de pe pagini — titluri,
+descrieri, întrebări frecvente și etichetele butoanelor. Le găsiți în Pages CMS ca
+intrări separate, lângă „Lucrări (proiecte)”:
+
+- **Text — Pagina principală** — supratitlul, titlul mare, subtitlul, intrările de la
+  „Ce facem” și „De ce ne aleg administratorii”, pașii „Cum lucrăm” și textul de la
+  final cu îndemnul de contact.
+- **Text — Servicii** — titlul paginii, subtitlul și textul de la final. (Descrierile
+  celor șase servicii se editează în intrarea **„Servicii”**.)
+- **Text — Despre** — povestea firmei, pașii „Cum lucrăm” și punctele „De ce noi”.
+- **Text — Contact** — titlul, subtitlul și etichetele butoanelor.
+- **Întrebări frecvente** — perechile întrebare/răspuns afișate pe pagina principală.
+- **Statistici de încredere** — anii de experiență, numărul de lucrări și textul despre
+  garanție.
+
+### Cum se editează
+
+1. Deschideți intrarea dorită (ex.: **„Text — Pagina principală”**).
+2. Modificați **doar textul** din câmpuri — titlu, subtitlu, puncte cheie, etichete
+   butoane. Fiecare câmp are o **indicație** sub el (de ex. „Maxim ~60 de caractere”) —
+   respectați-o, ca textul să încapă frumos pe ecran.
+3. Apăsați **„Save”** (Salvare). Modificarea se publică automat în câteva minute.
+
+> **De ce nu puteți strica nimic:** câmpurile sunt **structurate** — editați doar
+> cuvintele, nu și aranjarea paginii, titlurile sau codul din spate. Nu există niciun
+> buton care să strice forma paginii, ordinea secțiunilor sau datele pentru Google. Dacă
+> scrieți un text prea lung, site-ul vă va atenționa la salvare în loc să se strice.
+
+### Adăugarea numerelor reale (garanție, termene) mai târziu
+
+La lansare, site-ul vorbește **calitativ**: „garanție scrisă pentru toate lucrările” și
+„termene scurte”, **fără cifre** — pentru că le adăugați doar când sunteți sigur de ele.
+Când decideți, le puteți completa **singur**, dintr-un singur câmp, în
+**„Statistici de încredere”**:
+
+- un câmp pentru **durata garanției** (ex.: `24` luni),
+- un câmp pentru **termenul de execuție** (ex.: `3–7 zile lucrătoare`).
+
+Cât timp lăsați aceste câmpuri **goale**, site-ul afișează formularea calitativă de mai
+sus — nu apare niciun spațiu gol și nimic nu se strică. **Prețurile nu se publică pe
+site** (rămâne „prețuri competitive” + „deviz gratuit”) — aceasta este o decizie
+intenționată.
+
+---
+
+## 8. Dacă o modificare nu apare
 
 > **Dacă o modificare nu apare pe site în câteva minute, contactați dezvoltatorul.**
 
