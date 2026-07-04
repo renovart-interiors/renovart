@@ -132,8 +132,13 @@ const sitemapSet0 = 'dist/sitemap-0.xml';
 if (!existsSync(sitemapIdx)) fail(`${sitemapIdx} missing — @astrojs/sitemap did not emit the index`);
 if (!existsSync(sitemapSet0)) fail(`${sitemapSet0} missing — @astrojs/sitemap did not emit the url set`);
 const sitemapIdxXml = readFileSync(sitemapIdx, 'utf8');
-if (!sitemapIdxXml.includes('https://nume-firma.ro/'))
-  fail('sitemap-index.xml does not reference the custom domain (https://nume-firma.ro/)');
+// Derive the expected custom domain from the deployed CNAME (single source of truth) so this
+// check never drifts when the domain changes. CNAME holds a bare host (e.g. renovart-interiors.ro).
+if (!existsSync('dist/CNAME')) fail('dist/CNAME missing — custom domain not emitted');
+const customDomain = readFileSync('dist/CNAME', 'utf8').trim();
+const expectedOrigin = `https://${customDomain}/`;
+if (!sitemapIdxXml.includes(expectedOrigin))
+  fail(`sitemap-index.xml does not reference the custom domain (${expectedOrigin})`);
 if (sitemapIdxXml.includes('github.io'))
   fail('sitemap references github.io — site/base misconfigured');
 
@@ -196,6 +201,6 @@ if (!joinedLd(serviciiHtml).includes(escapeLd(serviceProbe)))
 console.log(
   `ALL_PASS: ${files.length} html files, ${ldCount} JSON-LD blocks valid; no <form> on Contact; ` +
     `no placeholders; expected node types present; ${lucrariPages.length} lucrari page(s) ship optimized ` +
-    `AVIF/WebP+srcset (${optimizedAssets.length} next-gen assets); sitemap emits from nume-firma.ro (no github.io); ` +
+    `AVIF/WebP+srcset (${optimizedAssets.length} next-gen assets); sitemap emits from ${customDomain} (no github.io); ` +
     `editable copy reaches BOTH DOM and JSON-LD on Home (FAQ answer) and Servicii (service description) — single-source, no drift (D-10)`,
 );

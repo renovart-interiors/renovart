@@ -15,13 +15,14 @@ export const business = {
   whatsappHref: `https://wa.me/${PHONE_WA}?text=${encodeURIComponent(WA_MESSAGE)}`,
   // Careers WhatsApp link (CAR-01) — reuses the existing PHONE_WA; applicant-tailored message.
   whatsappCareersHref: `https://wa.me/${PHONE_WA}?text=${encodeURIComponent(WA_CAREERS)}`,
-  // Realistic Cluj-Napoca placeholders (D-13) — tracked on the launch/handoff checklist:
-  email: 'contact@nume-firma.ro',
+  // Real domain live 2026-07-04; address/CUI still placeholders (owner to supply).
+  // Email is the owner's Yahoo for now — may switch to a @renovart-interiors.ro address later.
+  email: 'dr.sirbu_nicoleta@yahoo.com',
   address: 'Str. Exemplu nr. 10, Cluj-Napoca, Cluj',
   hours: 'Luni–Vineri, 08:00–17:00',
   serviceArea: 'Cluj-Napoca și împrejurimi',
   cui: 'RO00000000',
-  domain: 'https://nume-firma.ro', // D-14 placeholder
+  domain: 'https://renovart-interiors.ro',
   defaultDescription:
     'Renovarea profesională a scărilor de bloc în Cluj-Napoca.',
   // Placeholder OG image — a generated 1200x630 brand card lives at

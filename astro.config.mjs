@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://nume-firma.ro', // SET-03 — custom domain, never github.io
+  site: 'https://renovart-interiors.ro', // SET-03 — custom domain, never github.io
   base: '/', // SET-03 — no path prefix (handoff-safe)
   // output: 'static' is the Astro 6 default — do NOT set an adapter (SET-01)
   integrations: [mdx(), sitemap()], // SET-02
