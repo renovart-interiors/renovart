@@ -5,9 +5,24 @@
     "answer": "Oferim garanție scrisă pentru fiecare lucrare de renovare a scării de bloc, consemnată în procesul-verbal de predare. Durata și condițiile concrete se stabilesc în funcție de tipul lucrării (zugrăveli, reparații, instalații) și sunt trecute clar în deviz și în contract, astfel încât asociația să știe exact ce este acoperit."
   },
   {
+    "id": "cine-plateste",
+    "question": "Cine plătește renovarea scării de bloc?",
+    "answer": "Renovarea casei scării este o cheltuială comună a asociației de proprietari: o suportă toți proprietarii, repartizată pe cotă-parte indiviză, în funcție de suprafața utilă a fiecărui apartament. De regulă se finanțează din fondul de reparații, iar hotărârea se ia în adunarea generală, conform Legii 196/2018."
+  },
+  {
+    "id": "cum-se-calculeaza-pretul",
+    "question": "Cum se calculează prețul unei renovări de scară?",
+    "answer": "Pornim de la un preț de bază în funcție de numărul de etaje al blocului, pe care îl calibrăm apoi după complexitatea și particularitățile fiecărei scări — starea suprafețelor, tipul lucrărilor și accesul. Facem o evaluare la fața locului și întocmim un deviz clar, în scris, pe categorii de lucrări și materiale, fără costuri ascunse."
+  },
+  {
     "id": "deviz",
     "question": "Cum se face devizul?",
     "answer": "Devizul este gratuit și se face după o evaluare la fața locului. Venim în scara de bloc, măsurăm și notăm starea reală, apoi întocmim un deviz detaliat, pe categorii de lucrări și materiale, fără costuri ascunse. Astfel administratorul și proprietarii văd transparent ce se execută și ce plătesc înainte de a începe."
+  },
+  {
+    "id": "ce-include",
+    "question": "Ce include o renovare completă a casei scării?",
+    "answer": "O renovare completă include zugrăveli la pereți și tavane, reparații la trepte și podeste, balustrade și mână curentă, tâmplărie și uși de acces, instalații electrice (iluminat și senzori) și hidroizolații acolo unde e nevoie — plus curățenie inclusă gratuit la final. O singură firmă se ocupă de toată lucrarea, fără să alergați după mai mulți meșteri."
   },
   {
     "id": "termene",
@@ -15,9 +30,19 @@
     "answer": "O renovare standard de scară de bloc durează în general între câteva zile și două-trei săptămâni, în funcție de numărul de etaje și de complexitatea lucrărilor. Termenul exact îl stabilim în deviz, cu etape clare, și îl respectăm; lucrăm organizat ca accesul locatarilor să fie afectat cât mai puțin."
   },
   {
-    "id": "plata",
-    "question": "Cum se face plata?",
-    "answer": "Oferim modalități de plată flexibile, agreate dinainte cu asociația de proprietari și trecute clar în deviz. Plata se face etapizat, pe măsură ce lucrările avansează, nu integral în avans, astfel încât administratorul să aibă mereu lucrurile sub control. Lucrăm direct cu asociația, cu condiții stabilite de comun acord înainte de a începe."
+    "id": "majoritate-vot",
+    "question": "Ce majoritate e necesară la vot în adunarea generală?",
+    "answer": "Lucrările de reparație și întreținere curentă a casei scării (zugrăvit, trepte, balustradă) se aprobă cu majoritate simplă în adunarea generală, iar lucrările de modernizare necesită acordul a două treimi dintre proprietari. Odată adoptată, hotărârea adunării generale obligă toți proprietarii, inclusiv pe cei absenți sau care au votat împotrivă, potrivit Legii 196/2018."
+  },
+  {
+    "id": "fond-reparatii",
+    "question": "Se poate plăti din fondul de reparații?",
+    "answer": "Da. Renovarea casei scării este o cheltuială comună care se poate finanța din fondul de reparații al asociației. Dacă fondul nu acoperă integral lucrarea, diferența se colectează de la proprietari pe cotă-parte indiviză, conform Legii 196/2018."
+  },
+  {
+    "id": "metri-patrati",
+    "question": "Câți m² are o scară de bloc?",
+    "answer": "Ca reper, casa scării a unui bloc P+4 are aproximativ 150–250 m² de suprafață de zugrăvit. Suprafața exactă depinde de numărul de etaje și de arhitectura scării și o măsurăm la fața locului pentru deviz."
   },
   {
     "id": "zona",
