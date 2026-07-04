@@ -200,9 +200,51 @@ if (!serviciiHtml.includes(escapeHtml(serviceProbe)))
 if (!joinedLd(serviciiHtml).includes(escapeLd(serviceProbe)))
   fail(`Service description not in Servicii Service JSON-LD — DOM/JSON-LD drift (D-10) (probe: "${serviceProbe}")`);
 
+// 10. Ghiduri guide pages (Phase 8, GEO-02): existence + Article JSON-LD + content policy.
+// Content-policy checks run against the VISIBLE text (scripts/styles/tags stripped) so a
+// hashed asset filename can never trip the "no lei" / "no article number" fail-closed guards.
+const guideSlugs = [
+  'decizie-si-aprobare-renovare-scara',
+  'cat-costa-cine-plateste-renovare-scara',
+  'cum-alegi-firma-renovare-scara',
+];
+if (!existsSync('dist/ghiduri/index.html'))
+  fail('dist/ghiduri/index.html missing — guide list page did not build');
+const guideLdRe = /<script[^>]*application\/ld\+json[^>]*>([\s\S]*?)<\/script>/g;
+let articleNodeFound = false;
+for (const slug of guideSlugs) {
+  const gp = `dist/ghiduri/${slug}/index.html`;
+  if (!existsSync(gp)) fail(`${gp} missing — guide page did not build`);
+  const html = readFileSync(gp, 'utf8');
+  const visible = html
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<style[\s\S]*?<\/style>/gi, '')
+    .replace(/<[^>]+>/g, ' ');
+  if (/\bart\.|\barticol/i.test(visible))
+    fail(`${gp} cites an article number (art./articol…) — guides reference Legea 196/2018 by name only`);
+  if (/[0-9]+\s*lei/i.test(visible))
+    fail(`${gp} contains a lei figure — guides must not commit prices (owner directive)`);
+  guideLdRe.lastIndex = 0;
+  let gm;
+  while ((gm = guideLdRe.exec(html)) !== null) {
+    let parsed;
+    try {
+      parsed = JSON.parse(gm[1]);
+    } catch (e) {
+      fail(`invalid JSON-LD in ${gp}: ${e.message}`);
+    }
+    for (const node of flatten(parsed)) {
+      if (node && node['@type'] === 'Article' && node.mainEntityOfPage) articleNodeFound = true;
+    }
+  }
+}
+if (!articleNodeFound)
+  fail('no Article JSON-LD node (with mainEntityOfPage) on any /ghiduri page (GEO-02)');
+
 console.log(
   `ALL_PASS: ${files.length} html files, ${ldCount} JSON-LD blocks valid; no <form> on Contact; ` +
     `no placeholders; expected node types present; ${lucrariPages.length} lucrari page(s) ship optimized ` +
     `AVIF/WebP+srcset (${optimizedAssets.length} next-gen assets); sitemap emits from ${customDomain} (no github.io); ` +
-    `editable copy reaches BOTH DOM and JSON-LD on Home (FAQ answer) and Servicii (service description) — single-source, no drift (D-10)`,
+    `editable copy reaches BOTH DOM and JSON-LD on Home (FAQ answer) and Servicii (service description) — single-source, no drift (D-10); ` +
+    `${guideSlugs.length} ghiduri page(s) ship with Article JSON-LD and no article-number/lei citations (GEO-02)`,
 );
