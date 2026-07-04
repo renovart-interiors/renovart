@@ -80,6 +80,43 @@ content:
       # NOTE: `category` is intentionally NOT exposed (D-08) — no filtering UI consumes
       # it; it stays an optional schema field in src/content.config.ts, hidden from the form.
 
+  # ── Phase 8 guide collection (GHID-01) ──────────────────────────────────────
+  # Markdown guides for administratori/asociații. No media source (guides ship no
+  # images). date/updated use yyyy-MM-dd to match z.coerce.date() in the schema.
+  - name: ghiduri
+    label: Ghiduri
+    type: collection
+    path: src/content/ghiduri
+    format: yaml-frontmatter # frontmatter + markdown body round-trip
+    view:
+      fields: [title, order, date]
+    fields:
+      - name: title
+        label: Titlu
+        type: string
+      - name: description
+        label: Descriere scurtă
+        type: text
+        description: O propoziție — apare în meta, în card și în datele structurate. Fără sume în lei.
+      - name: date
+        label: Dată publicare
+        type: date
+        options:
+          format: yyyy-MM-dd # matches z.coerce.date()
+      - name: updated
+        label: Dată actualizare (opțional)
+        type: date
+        options:
+          format: yyyy-MM-dd
+        description: Opțional — completați când actualizați ghidul.
+      - name: order
+        label: Ordine
+        type: number
+        description: Ordinea de afișare în listă (1, 2, 3…).
+      - name: body
+        label: Conținut ghid
+        type: rich-text
+
   # ── Phase 5 editable marketing copy (CMS-03, D-08/D-09/D-11) ────────────────
   # Three `type: file` singletons over the src/data/copy/*.json files loaded by
   # the faqCopy/servicesCopy/trustCopy collections. STRUCTURED plain-text fields

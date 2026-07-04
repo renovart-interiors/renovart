@@ -37,6 +37,14 @@ const featured = (await getCollection('lucrari', ({ data }) => data.featured))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 4);
 
+// Phase 8: "Ghiduri utile" contextual surface (GHID-01). Collection-driven +
+// conditionally rendered (like `featured`) → the section disappears cleanly when
+// there are no guides. Links live here + in the nav/footer, NOT inside FAQ answer
+// strings (keeps FAQPage JSON-LD clean — LOCKED decision).
+const guides = (await getCollection('ghiduri')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
 // Home @graph — @context ONCE at the root, not on each node.
 const graph = {
   '@context': 'https://schema.org',
@@ -160,6 +168,33 @@ const steps = home.steps;
     <!-- 6. FAQ (renders its own h2 + Q&A). Pass the SAME `faq` const fed to
          faqPageSchema() above so DOM + JSON-LD share one source (WR-03, D-10). -->
     <Faq items={faq} />
+
+    <!-- 6b. Ghiduri utile (collection-driven; hidden when empty) -->
+    {
+      guides.length > 0 && (
+        <section class="block" aria-labelledby="ghiduri-utile">
+          <h2 id="ghiduri-utile">Ghiduri utile</h2>
+          <p>
+            Răspunsuri clare pentru administratori și asociații de proprietari — cum
+            se decide și se aprobă renovarea, cine plătește și cum alegeți o firmă
+            serioasă.
+          </p>
+          <ul class="guide-list" role="list">
+            {guides.map((guide) => (
+              <li>
+                <a class="guide-list__link" href={`/ghiduri/${guide.id}`}>
+                  {guide.data.title}
+                </a>
+                <p class="guide-list__desc">{guide.data.description}</p>
+              </li>
+            ))}
+          </ul>
+          <p class="block__link">
+            <a href="/ghiduri">Vezi toate ghidurile</a>
+          </p>
+        </section>
+      )
+    }
 
     <!-- 7. Closing CTA -->
     <section class="block" aria-labelledby="contact-title">
@@ -325,6 +360,37 @@ const steps = home.steps;
 
   .grid > li > :global(.card) {
     width: 100%;
+  }
+
+  /* Ghiduri utile list */
+  .guide-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .guide-list__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    color: var(--color-accent);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.125rem;
+    text-decoration: none;
+  }
+
+  .guide-list__link:hover {
+    text-decoration: underline;
+  }
+
+  .guide-list__desc {
+    margin: 0;
+    color: var(--color-slate-700);
+    max-width: 60ch;
   }
 
   /* "Cum lucrăm" steps */

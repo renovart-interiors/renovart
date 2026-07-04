@@ -26,6 +26,10 @@ const year = new Date().getFullYear();
     <p class="footer__meta">Program: {business.hours}</p>
     <p class="footer__meta">Zonă deservită: {business.serviceArea}</p>
 
+    <nav class="footer__nav" aria-label="Ghiduri">
+      <a href="/ghiduri">Ghiduri utile pentru administratori</a>
+    </nav>
+
     <p class="footer__copy">
       © {year} {business.name}. Toate drepturile rezervate.
     </p>
@@ -78,6 +82,29 @@ const year = new Date().getFullYear();
   .footer__meta {
     margin: 0;
     color: var(--color-on-dark);
+  }
+
+  .footer__nav {
+    margin: var(--space-sm) 0 0;
+  }
+
+  .footer__nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    color: var(--color-on-dark);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .footer__nav a:hover {
+    color: var(--color-accent-300);
+  }
+
+  .footer__nav a:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 5px var(--color-accent-300);
   }
 
   .footer__copy {
