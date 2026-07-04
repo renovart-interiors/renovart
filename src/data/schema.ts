@@ -20,13 +20,19 @@ const tel = business.telHref.replace(/^tel:/, '');
 const ogImageAbs = new URL(business.ogImage, SITE).href;
 
 /**
- * HomeAndConstructionBusiness (LocalBusiness subtype) — emitted on Home + Contact.
+ * Business node — emitted on Home + Contact. Typed as BOTH
+ * HomeAndConstructionBusiness (parent) AND GeneralContractor (most specific
+ * LocalBusiness subtype for a renovation firm) so answer engines resolve the
+ * precise entity while general consumers still match the parent (GEO-01).
  * `geo` is intentionally OMITTED: no fake coordinates are shipped (geo is
- * recommended, not required, so absence is valid).
+ * recommended, not required, so absence is valid). `sameAs`/`priceRange` are
+ * intentionally absent — sameAs awaits a real Google Business Profile (owner
+ * follow-up) and priceRange would be a pricing claim the owner has chosen not
+ * to make.
  */
 export function homeAndConstructionBusiness() {
   return {
-    '@type': 'HomeAndConstructionBusiness',
+    '@type': ['HomeAndConstructionBusiness', 'GeneralContractor'],
     '@id': BIZ_ID,
     name: business.name,
     url: SITE,

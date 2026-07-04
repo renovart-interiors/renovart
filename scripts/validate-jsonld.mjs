@@ -54,9 +54,11 @@ const has = (file, needle) => {
   if (!readFileSync(file, 'utf8').includes(needle)) fail(`"${needle}" not found in ${file}`);
 };
 has('dist/index.html', 'HomeAndConstructionBusiness');
+has('dist/index.html', 'GeneralContractor'); // GEO-01 — most-specific business type
 has('dist/index.html', 'FAQPage');
 has('dist/index.html', 'twitter:card');
 has('dist/contact/index.html', 'HomeAndConstructionBusiness');
+has('dist/contact/index.html', 'GeneralContractor'); // GEO-01
 
 // Servicii: structurally assert the TOP-LEVEL provider-carrying Service node shipped
 // (a plain '"@type":"Service"' substring also matches the nested itemOffered offers,
