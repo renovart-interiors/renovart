@@ -4,7 +4,7 @@
 const PHONE_DISPLAY = '+40 757 656 989'; // human-readable (D-11)
 const PHONE_TEL = '+40757656989'; // tel: form — keep the leading + (D-11)
 const PHONE_WA = '40757656989'; // wa.me path — NO +, NO spaces (D-12)
-const WA_MESSAGE = 'Bună ziua, aș dori detalii despre renovarea scării de bloc.'; // D-12
+const WA_MESSAGE = 'Bună ziua, sunt administrator de bloc și doresc o ofertă pentru renovarea scării de bloc.'; // D-12 — administrator-tailored prefill (CTA-01)
 // Careers-tailored WhatsApp prefill for job applicants (CAR-01 / D-09) — same number, applicant framing.
 const WA_CAREERS = 'Bună ziua, sunt interesat(ă) de un loc de muncă (zugrav-finisor) la Renovart Interiors.';
 
