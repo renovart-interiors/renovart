@@ -1,0 +1,158 @@
+---
+// /ghiduri — guide list page (GHID-01). Reads the ghiduri collection, sorts by
+// `order` ascending, and renders one card per guide. Empty-state safe: builds
+// green with zero guides (mirrors /lucrari). Zero client JS, tokens-only styles.
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { business } from '../../data/business';
+
+const guides = (await getCollection('ghiduri')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+const description =
+  'Ghiduri practice pentru administratori și asociații de proprietari despre renovarea scării de bloc: cum se decide și se aprobă, cât costă și cine plătește, cum alegi o firmă serioasă.';
+---
+
+<BaseLayout title="Ghiduri — Renovart Interiors" description={description}>
+  <div class="page">
+    <header class="page__head">
+      <h1>Ghiduri</h1>
+      <p class="page__intro">
+        Ghiduri practice pentru administratori și asociații de proprietari despre
+        renovarea scării de bloc — de la decizie și aprobare în adunarea generală,
+        până la costuri și alegerea unei firme serioase.
+      </p>
+    </header>
+
+    {
+      guides.length > 0 ? (
+        <ul class="guides" role="list">
+          {guides.map((guide) => (
+            <li class="guide-card">
+              <a class="guide-card__link" href={`/ghiduri/${guide.id}`}>
+                <h2 class="guide-card__title">{guide.data.title}</h2>
+              </a>
+              <p class="guide-card__desc">{guide.data.description}</p>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div class="empty">
+          <h2 class="empty__heading">Curând adăugăm ghiduri aici.</h2>
+          <p class="empty__body">
+            Ghidurile noastre pentru administratori și asociații de proprietari vor
+            apărea în această secțiune. Până atunci, ne puteți contacta direct.
+          </p>
+          <p class="empty__cta">
+            <a href={business.telHref}>{business.phoneDisplay}</a>
+            {' · '}
+            <a href={business.whatsappHref}>WhatsApp</a>
+          </p>
+        </div>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    max-width: 75rem;
+    margin: 0 auto;
+    padding: var(--space-2xl) var(--space-md);
+  }
+
+  .page__head {
+    margin-bottom: var(--space-xl);
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-slate-900);
+    margin: 0 0 var(--space-sm);
+  }
+
+  .page__intro {
+    margin: 0;
+    color: var(--color-slate-700);
+    max-width: 60ch;
+  }
+
+  .guides {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .guide-card {
+    border: 1px solid var(--color-slate-600);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    background: var(--color-surface);
+  }
+
+  .guide-card__link {
+    text-decoration: none;
+    display: inline-flex;
+    min-height: 48px;
+    align-items: center;
+  }
+
+  .guide-card__title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--color-slate-900);
+    margin: 0 0 var(--space-xs);
+  }
+
+  .guide-card__link:hover .guide-card__title {
+    color: var(--color-accent);
+  }
+
+  .guide-card__desc {
+    margin: 0;
+    color: var(--color-slate-700);
+    max-width: 60ch;
+  }
+
+  .empty {
+    max-width: 60ch;
+  }
+
+  .empty__heading {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-slate-900);
+  }
+
+  .empty__body {
+    color: var(--color-slate-700);
+  }
+
+  .empty__cta a {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  @media (min-width: 768px) {
+    .page {
+      padding: var(--space-2xl) var(--space-lg);
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    .guides {
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: var(--space-lg);
+    }
+  }
+</style>

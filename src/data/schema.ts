@@ -117,3 +117,31 @@ export function breadcrumbList(crumbs: readonly { name: string; url?: string }[]
     })),
   };
 }
+
+/**
+ * Article node — emitted on each /ghiduri/[slug] guide (GEO-02, Phase 8).
+ * Single-sourced from business.ts via BIZ_ID: `author` and `publisher` both
+ * reference the same GeneralContractor/Organization entity, so answer engines
+ * resolve one consistent brand. Returns a plain node WITHOUT `@context`; the
+ * guide page wraps a @graph and adds `@context` once at the root.
+ */
+export function articleSchema(args: {
+  headline: string;
+  description: string;
+  path: string;
+  datePublished: string;
+  dateModified: string;
+}) {
+  return {
+    '@type': 'Article',
+    headline: args.headline,
+    description: args.description,
+    inLanguage: 'ro-RO',
+    datePublished: args.datePublished,
+    dateModified: args.dateModified,
+    author: { '@id': BIZ_ID },
+    publisher: { '@id': BIZ_ID },
+    mainEntityOfPage: new URL(args.path, SITE).href,
+    image: ogImageAbs,
+  };
+}

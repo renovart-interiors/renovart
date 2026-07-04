@@ -62,6 +62,22 @@ const lucrari = defineCollection({
       }),
 });
 
+// `ghiduri` — Phase 8 answer-first guide collection (GHID-01). Same glob-loader
+// pattern as `lucrari` (markdown body, id = dir name), but carries NO images, so
+// the schema function is `() =>` (no `image()` helper). Consumed by /ghiduri
+// (list) + /ghiduri/[slug] (article + Article JSON-LD via articleSchema()).
+const ghiduri = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/ghiduri' }),
+  schema: () =>
+    z.object({
+      title: z.string(),
+      description: z.string(), // meta + list card + Article description
+      date: z.coerce.date(), // datePublished (ISO YYYY-MM-DD)
+      updated: z.coerce.date().optional(), // dateModified
+      order: z.number(), // stable list sort
+    }),
+});
+
 // ── Phase 5 editable-copy collections (CMS-03, D-08/D-09/D-10) ──────────────
 // The FAQ, services, and trust marketing copy moves out of TS literals into
 // zod-validated JSON the owner edits via Pages CMS. Each collection is the
@@ -199,6 +215,7 @@ const contactCopy = defineCollection({
 
 export const collections = {
   lucrari,
+  ghiduri,
   faqCopy,
   servicesCopy,
   trustCopy,

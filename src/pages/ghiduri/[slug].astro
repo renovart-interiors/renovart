@@ -1,0 +1,229 @@
+---
+// /ghiduri/[slug] — guide article page (GHID-01, GEO-02). Mirrors
+// lucrari/[slug].astro: standalone render() for the markdown body, breadcrumb
+// DOM + BreadcrumbList JSON-LD, and an Article JSON-LD node single-sourced from
+// business.ts (articleSchema → BIZ_ID). The markdown body starts at H2; the H1
+// comes from frontmatter `title`. Empty collection → getStaticPaths() = [] →
+// zero slug pages (valid). Zero client JS, no images.
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import JsonLd from '../../components/JsonLd.astro';
+import { articleSchema, breadcrumbList } from '../../data/schema';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('ghiduri');
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { title, description, date, updated } = entry.data;
+
+const path = `/ghiduri/${entry.id}`;
+
+// @graph — @context ONCE at the root, not on each node (matches schema.ts contract).
+const graph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    articleSchema({
+      headline: title,
+      description,
+      path,
+      datePublished: date.toISOString(),
+      dateModified: (updated ?? date).toISOString(),
+    }),
+    breadcrumbList([
+      { name: 'Acasă', url: '/' },
+      { name: 'Ghiduri', url: '/ghiduri' },
+      { name: title },
+    ]),
+  ],
+};
+
+const dateLabel = new Intl.DateTimeFormat('ro-RO', {
+  year: 'numeric',
+  month: 'long',
+}).format(updated ?? date);
+---
+
+<BaseLayout title={`${title} — Renovart Interiors`} description={description}>
+  <JsonLd slot="head" data={graph} />
+
+  <article class="detail">
+    <nav aria-label="Breadcrumb" class="crumbs">
+      <ol>
+        <li><a href="/">Acasă</a></li>
+        <li class="crumbs__sep" aria-hidden="true">›</li>
+        <li><a href="/ghiduri">Ghiduri</a></li>
+        <li class="crumbs__sep" aria-hidden="true">›</li>
+        <li aria-current="page">{title}</li>
+      </ol>
+    </nav>
+
+    <h1 class="detail__title">{title}</h1>
+    <p class="detail__meta">Actualizat: {dateLabel}</p>
+
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .detail {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: var(--space-2xl) var(--space-md);
+  }
+
+  @media (min-width: 768px) {
+    .detail {
+      padding: var(--space-2xl) var(--space-lg);
+    }
+  }
+
+  /* ─── Breadcrumb ─────────────────────────────────────────────────────────── */
+  .crumbs ol {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-xs);
+    margin: 0 0 var(--space-md);
+    padding: 0;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  .crumbs li {
+    display: flex;
+    align-items: center;
+  }
+
+  .crumbs__sep {
+    margin: 0 var(--space-xs);
+    color: var(--color-slate-500);
+    font-weight: 400;
+  }
+
+  .crumbs a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    color: var(--color-slate-700);
+    text-decoration: none;
+  }
+
+  .crumbs a:hover {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+
+  .crumbs [aria-current='page'] {
+    color: var(--color-slate-500);
+  }
+
+  /* ─── Header ─────────────────────────────────────────────────────────────── */
+  .detail__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.75rem;
+    line-height: 1.2;
+    color: var(--color-slate-900);
+    margin: 0 0 var(--space-xs);
+    max-width: 30ch;
+  }
+
+  @media (min-width: 768px) {
+    .detail__title {
+      font-size: 2rem;
+    }
+  }
+
+  .detail__meta {
+    margin: 0 0 var(--space-xl);
+    color: var(--color-slate-700);
+    font-size: 1rem;
+  }
+
+  /* ─── Markdown prose (verbatim tokens from lucrari/[slug].astro) ──────────── */
+  .prose {
+    max-width: 70ch;
+    color: var(--color-slate-700);
+    margin-bottom: var(--space-xl);
+  }
+
+  .prose :global(h2) {
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--color-slate-900);
+    margin: var(--space-xl) 0 var(--space-sm);
+  }
+
+  .prose :global(h3) {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--color-slate-900);
+    margin: var(--space-lg) 0 var(--space-xs);
+  }
+
+  .prose :global(p),
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin: 0 0 var(--space-md);
+    line-height: 1.5;
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    padding-left: var(--space-lg);
+  }
+
+  .prose :global(li) {
+    margin-bottom: var(--space-sm);
+  }
+
+  .prose :global(strong) {
+    color: var(--color-slate-900);
+  }
+
+  .prose :global(a) {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  .prose :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 var(--space-md);
+    font-size: 0.9375rem;
+  }
+
+  .prose :global(th),
+  .prose :global(td) {
+    border: 1px solid var(--color-slate-600);
+    padding: var(--space-sm);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .prose :global(th) {
+    background: var(--color-surface);
+    color: var(--color-slate-900);
+  }
+
+  @media (min-width: 768px) {
+    .detail__meta,
+    .prose {
+      margin-bottom: var(--space-2xl);
+    }
+  }
+</style>
