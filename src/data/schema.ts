@@ -42,8 +42,8 @@ export function homeAndConstructionBusiness() {
     logo: ogImageAbs,
     address: {
       '@type': 'PostalAddress',
-      // Derived from business.address ('Str. Exemplu nr. 10, Cluj-Napoca, Cluj').
-      streetAddress: business.address.split(',')[0]?.trim() ?? business.address,
+      // Service-area business (no public storefront): city/region/country only, no
+      // streetAddress (a fake/omitted street would hurt local trust more than help).
       addressLocality: 'Cluj-Napoca',
       addressRegion: 'Cluj',
       addressCountry: 'RO',

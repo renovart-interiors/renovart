@@ -15,10 +15,12 @@ export const business = {
   whatsappHref: `https://wa.me/${PHONE_WA}?text=${encodeURIComponent(WA_MESSAGE)}`,
   // Careers WhatsApp link (CAR-01) — reuses the existing PHONE_WA; applicant-tailored message.
   whatsappCareersHref: `https://wa.me/${PHONE_WA}?text=${encodeURIComponent(WA_CAREERS)}`,
-  // Real domain live 2026-07-04; address/CUI still placeholders (owner to supply).
+  // Real domain live 2026-07-04; CUI still a placeholder (owner to supply).
   // Email is the owner's Yahoo for now — may switch to a @renovart-interiors.ro address later.
+  // Service-area business (no public storefront): NO street address is shown in the
+  // footer/contact page or emitted in JSON-LD — location is expressed via serviceArea
+  // + addressLocality (Cluj-Napoca) only.
   email: 'dr.sirbu_nicoleta@yahoo.com',
-  address: 'Str. Exemplu nr. 10, Cluj-Napoca, Cluj',
   hours: 'Luni–Vineri, 08:00–17:00',
   serviceArea: 'Cluj-Napoca și împrejurimi',
   cui: 'RO00000000',
