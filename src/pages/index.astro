@@ -15,7 +15,7 @@ import { requireSingleton } from '../lib/requireSingleton';
 import ProjectCard from '../components/ProjectCard.astro';
 import Faq from '../components/Faq.astro';
 import JsonLd from '../components/JsonLd.astro';
-import { homeAndConstructionBusiness, faqPageSchema } from '../data/schema';
+import { homeAndConstructionBusiness, websiteSchema, faqPageSchema } from '../data/schema';
 
 // Phase 5: editable copy from the JSON-backed collections (single source for
 // DOM + JSON-LD, no drift — D-10). Read each ONCE into a const (Pitfall 3).
@@ -48,7 +48,7 @@ const guides = (await getCollection('ghiduri')).sort(
 // Home @graph — @context ONCE at the root, not on each node.
 const graph = {
   '@context': 'https://schema.org',
-  '@graph': [homeAndConstructionBusiness(), faqPageSchema(faq)],
+  '@graph': [homeAndConstructionBusiness(), websiteSchema(), faqPageSchema(faq)],
 };
 
 // "Cum lucrăm" condensed teaser steps now live in home.json (CMS-editable).

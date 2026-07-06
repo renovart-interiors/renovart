@@ -31,6 +31,9 @@ export const business = {
   // public/og-default.png. LAUNCH CHECKLIST: replace with a real branded
   // before/after share image before handoff (WR-02 / IN-03).
   ogImage: '/og-default.png',
+  // Agency that built the site — surfaced as the footer credit link and as the
+  // WebSite node's `creator` in JSON-LD (schema.org provenance / AEO signal).
+  builtBy: { name: 'Boring Technologies', url: 'https://boringtechnologies.com/' },
 } as const;
 
 // NOTE (Phase 5, CMS-03): the former `trust` const moved to the CMS-editable

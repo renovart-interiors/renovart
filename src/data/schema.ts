@@ -62,6 +62,31 @@ export function homeAndConstructionBusiness() {
 }
 
 /**
+ * WebSite node — emitted on Home. Declares site-level provenance: `publisher`
+ * cross-references the business (Renovart owns/publishes the content) while
+ * `creator` names the agency that built the site (Boring Technologies) as a
+ * resolvable Organization with its own @id + url. This is the schema.org-correct
+ * "built by" relationship — a soft AEO/entity signal that complements (does not
+ * replace) the followed footer credit link.
+ */
+export function websiteSchema() {
+  return {
+    '@type': 'WebSite',
+    '@id': `${SITE}/#website`,
+    url: SITE,
+    name: business.name,
+    inLanguage: 'ro-RO',
+    publisher: { '@id': BIZ_ID },
+    creator: {
+      '@type': 'Organization',
+      '@id': `${business.builtBy.url}#organization`,
+      name: business.builtBy.name,
+      url: business.builtBy.url,
+    },
+  };
+}
+
+/**
  * Service node — emitted on Servicii. `provider` cross-references the business
  * node by @id (no duplication). `hasOfferCatalog` lists the six offerings.
  */
